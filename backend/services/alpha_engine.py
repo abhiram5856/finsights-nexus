@@ -47,10 +47,13 @@ class AlphaEngine:
         Fits the Prophet model on the Close price, computes residuals,
         and fits XGBoost on features to predict residuals.
         """
+        df = df.copy()
+        if isinstance(df.columns, pd.MultiIndex):
+            df.columns = df.columns.get_level_values(0)
+            
         if 'Close' not in df.columns:
             raise ValueError("Dataframe must contain 'Close' column.")
             
-        df = df.copy()
         df.reset_index(inplace=True)
         # Ensure we have a Date column
         date_col = df.columns[0]

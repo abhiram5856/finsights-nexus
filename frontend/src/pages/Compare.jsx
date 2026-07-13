@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { useComparison } from '../hooks/useComparison';
 import ComparisonChart from '../components/ComparisonChart';
 import ComparisonTable from '../components/ComparisonTable';
+import StockAutocomplete from '../components/StockAutocomplete';
 import { Plus, X, Search, TrendingUp, Info } from 'lucide-react';
 
 const POPULAR_TICKERS = [
-    { symbol: '', name: 'Select a stock to compare...' },
     { symbol: 'AAPL', name: 'Apple Inc. (AAPL)' },
     { symbol: 'MSFT', name: 'Microsoft Corp. (MSFT)' },
     { symbol: 'NVDA', name: 'NVIDIA Corp. (NVDA)' },
@@ -19,20 +19,27 @@ const POPULAR_TICKERS = [
     { symbol: 'BTC-USD', name: 'Bitcoin (BTC)' },
 ];
 
-
 export default function Compare({ theme }) {
     const [tickers, setTickers] = useState([]);
     const [newTicker, setNewTicker] = useState('');
     const { data, loading, error, compareStocks } = useComparison();
 
     const handleAddTicker = (e) => {
-        e.preventDefault();
+        if (e) e.preventDefault();
         if (!newTicker) return;
         const cleanTicker = newTicker.trim().toUpperCase();
         if (tickers.includes(cleanTicker)) return;
-        if (tickers.length >= 6) return;
+        if (tickers.length >= 10) return; // Raised limit to 10
         setTickers([...tickers, cleanTicker]);
         setNewTicker('');
+    };
+
+    const handleAddSelectedTicker = (symbol) => {
+        if (!symbol) return;
+        const cleanTicker = symbol.trim().toUpperCase();
+        if (tickers.includes(cleanTicker)) return;
+        if (tickers.length >= 10) return; // Raised limit to 10
+        setTickers([...tickers, cleanTicker]);
     };
 
     const handleRemoveTicker = (ticker) => {
@@ -46,12 +53,45 @@ export default function Compare({ theme }) {
     return (
         <div className="max-w-7xl mx-auto space-y-6 md:space-y-8 pb-10 px-0 md:px-2 transition-colors duration-300">
             <div className="flex flex-col lg:flex-row lg:items-center gap-6 md:gap-8 bg-[var(--bg-card)] p-5 md:p-8 rounded-2xl border border-[var(--border-color)] shadow-sm">
-                <div className="flex-1 space-y-3 md:space-y-4">
+                <div className="flex-1 space-y-5">
                     <div className="flex items-center gap-2">
                         <label className="text-xs md:text-sm font-bold text-[var(--text-main)] uppercase tracking-tight">Active Comparison</label>
-                        <span className="text-[9px] md:text-[10px] bg-[var(--text-muted)]/10 text-[var(--text-muted)] px-2 py-0.5 rounded font-black">{tickers.length}/6</span>
+                        <span className="text-[9px] md:text-[10px] bg-[var(--accent-primary)]/10 text-[var(--accent-primary)] px-2 py-0.5 rounded font-black">{tickers.length}/10</span>
                     </div>
-                    <div className="flex flex-wrap gap-2 md:gap-2.5">
+
+                    {/* Autocomplete and Manual Search Bar */}
+                    <div className="flex flex-col md:flex-row gap-4 items-end w-full">
+                        <div className="flex-1 w-full">
+                            <label className="text-[11px] font-bold text-[var(--text-muted)] uppercase tracking-wider mb-2 block">Search Indian Stocks (A-Z):</label>
+                            <StockAutocomplete 
+                                onSelect={(symbol) => handleAddSelectedTicker(symbol)}
+                                clearOnSelect={true}
+                                placeholder="Search stock to add (e.g. RELIANCE, TCS)..."
+                                excludeSymbols={tickers}
+                            />
+                        </div>
+                        <form onSubmit={handleAddTicker} className="flex gap-2 w-full md:w-auto items-end">
+                            <div className="flex-1 md:flex-initial">
+                                <label className="text-[11px] font-bold text-[var(--text-muted)] uppercase tracking-wider mb-2 block">Or Type Symbol (US/Crypto):</label>
+                                <input 
+                                    type="text" 
+                                    value={newTicker}
+                                    onChange={(e) => setNewTicker(e.target.value)}
+                                    placeholder="e.g. AAPL, BTC-USD"
+                                    className="bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)]/50 focus:border-[var(--accent-primary)] transition-all placeholder:text-[var(--text-muted)] text-[var(--text-main)] font-medium w-full md:w-44"
+                                />
+                            </div>
+                            <button 
+                                type="submit"
+                                className="bg-[var(--bg-primary)] hover:bg-[var(--accent-primary)]/10 hover:text-[var(--accent-primary)] border border-[var(--border-color)] text-[var(--text-main)] px-5 py-3 rounded-xl font-bold transition-all flex items-center justify-center gap-2 shadow-sm"
+                            >
+                                <Plus size={18} />
+                                Add
+                            </button>
+                        </form>
+                    </div>
+
+                    <div className="flex flex-wrap gap-2 md:gap-2.5 pt-2">
                         {tickers.map((t) => (
                             <span
                                 key={t}
@@ -66,25 +106,26 @@ export default function Compare({ theme }) {
                                 </button>
                             </span>
                         ))}
-                        {tickers.length < 6 && (
-                            <div className="flex flex-wrap gap-2 w-full mt-3 pt-3 border-t border-[var(--border-color)]">
-                                <span className="text-[11px] font-bold text-[var(--text-muted)] w-full uppercase tracking-wider mb-1">Quick Select:</span>
-                                {POPULAR_TICKERS.filter(pt => pt.symbol).map(pt => (
-                                    <button
-                                        key={pt.symbol}
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            if (!tickers.includes(pt.symbol)) setTickers([...tickers, pt.symbol]);
-                                        }}
-                                        disabled={tickers.includes(pt.symbol)}
-                                        className="px-3 py-1.5 text-xs font-bold bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-xl text-[var(--text-muted)] hover:text-[var(--text-main)] hover:border-[var(--accent-primary)] hover:bg-[var(--accent-primary)]/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-sm"
-                                    >
-                                        {pt.name}
-                                    </button>
-                                ))}
-                            </div>
-                        )}
                     </div>
+
+                    {tickers.length < 10 && (
+                        <div className="flex flex-wrap gap-2 w-full mt-3 pt-3 border-t border-[var(--border-color)]">
+                            <span className="text-[11px] font-bold text-[var(--text-muted)] w-full uppercase tracking-wider mb-1">Quick Select:</span>
+                            {POPULAR_TICKERS.map(pt => (
+                                <button
+                                    key={pt.symbol}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        if (!tickers.includes(pt.symbol)) setTickers([...tickers, pt.symbol]);
+                                    }}
+                                    disabled={tickers.includes(pt.symbol)}
+                                    className="px-3 py-1.5 text-xs font-bold bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-xl text-[var(--text-muted)] hover:text-[var(--text-main)] hover:border-[var(--accent-primary)] hover:bg-[var(--accent-primary)]/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-sm"
+                                >
+                                    {pt.symbol}
+                                </button>
+                            ))}
+                        </div>
+                    )}
                 </div>
                 <button
                     onClick={handleCompare}
@@ -121,7 +162,7 @@ export default function Compare({ theme }) {
                     </div>
                     <div className="text-center px-6">
                         <p className="text-lg md:text-xl font-bold text-[var(--text-main)]">Ready to compare</p>
-                        <p className="text-xs md:text-sm max-w-xs mx-auto mt-2 leading-relaxed">Select 2-6 tickers above and run the comparison to see real-time performance correlations.</p>
+                        <p className="text-xs md:text-sm max-w-xs mx-auto mt-2 leading-relaxed">Select 2-10 tickers above and run the comparison to see real-time performance correlations.</p>
                     </div>
                 </div>
             )}

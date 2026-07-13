@@ -31,8 +31,8 @@ def compare_stocks(request: ComparisonRequest):
     if not request.tickers:
         raise HTTPException(status_code=400, detail="No tickers provided")
     
-    if len(request.tickers) < 2 or len(request.tickers) > 6:
-        raise HTTPException(status_code=400, detail="Please provide 2 to 6 tickers for comparison")
+    if len(request.tickers) < 2 or len(request.tickers) > 10:
+        raise HTTPException(status_code=400, detail="Please provide 2 to 10 tickers for comparison")
 
     try:
         results = get_multi_stock_comparison(request.tickers)
