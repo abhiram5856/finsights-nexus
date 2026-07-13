@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel
 import yfinance as yf
 import pandas as pd
@@ -52,8 +52,16 @@ async def predict_stock(symbol: str, days: int = 7):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/chat")
-async def chat_with_nexus(req: ChatRequest):
+async def chat_with_nexus(req: ChatRequest, request: Request):
     try:
+        # Extract user_id from token if available to enable per-user chat memory
+        from services.auth import get_current_user
+        try:
+            user_id = get_current_user(request)
+            thread_id = f"nexus_user_{user_id}"
+        except Exception:
+            thread_id = "nexus_guest_session"
+
         if req.image_base64:
             content = [
                 {"type": "text", "text": req.prompt},
@@ -65,7 +73,7 @@ async def chat_with_nexus(req: ChatRequest):
         # Run the LangGraph execution in a background thread to prevent blocking
         def _invoke_graph():
             # Provide a thread_id to enable conversational memory across requests
-            config = {"configurable": {"thread_id": "nexus_user_1"}}
+            config = {"configurable": {"thread_id": thread_id}}
             return nexus_graph.invoke({
                 "messages": [HumanMessage(content=content)]
             }, config=config)
