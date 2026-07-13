@@ -77,17 +77,11 @@ async def chat_with_nexus(req: ChatRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-from transformers import pipeline
-
-# Lazily loaded global pipeline to avoid crashing the server on boot
-sentiment_analyzer = None
+from langchain_google_genai import ChatGoogleGenerativeAI
+import json
 
 @cached(cache=sentiment_cache)
 def _get_cached_sentiment(symbol: str):
-    global sentiment_analyzer
-    if sentiment_analyzer is None:
-        sentiment_analyzer = pipeline("sentiment-analysis", model="ProsusAI/finbert")
-        
     ticker = yf.Ticker(symbol)
     news_list = ticker.news
     if not news_list:
@@ -95,33 +89,60 @@ def _get_cached_sentiment(symbol: str):
         
     headlines = [n.get('title', '') for n in news_list[:10]]
     
-    total_score = 0
-    bullish_count = 0
-    bearish_count = 0
-    
-    for h in headlines:
-        try:
-            res = sentiment_analyzer(h)[0]
-            label = res['label'].lower()
-            if label == 'positive':
+    try:
+        llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", temperature=0, api_key=os.getenv("GEMINI_API_KEY", ""))
+        
+        prompt = (
+            "You are a financial sentiment analysis tool. Analyze the following stock headlines "
+            "and classify each as either 'positive', 'negative', or 'neutral'.\n"
+            "Return the response strictly as a JSON object in this format:\n"
+            "{\n"
+            "  \"sentiments\": [\"positive\", \"neutral\", \"negative\", ...]\n"
+            "}\n"
+            "Do not include any markdown styling, backticks, or '```json' wrapper. Return raw JSON text.\n\n"
+            "Headlines:\n" + "\n".join([f"- {h}" for h in headlines])
+        )
+        
+        response = llm.invoke(prompt)
+        res_text = response.content.strip()
+        
+        # Clean up any potential markdown wraps
+        if "```json" in res_text:
+            res_text = res_text.split("```json")[1].split("```")[0].strip()
+        elif "```" in res_text:
+            res_text = res_text.split("```")[1].split("```")[0].strip()
+            
+        data = json.loads(res_text)
+        sentiments = data.get("sentiments", [])
+        
+        total_score = 0
+        bullish_count = 0
+        bearish_count = 0
+        
+        for label in sentiments:
+            label_lower = label.lower()
+            if 'positive' in label_lower:
                 total_score += 100
                 bullish_count += 1
-            elif label == 'negative':
+            elif 'negative' in label_lower:
                 total_score += 0
                 bearish_count += 1
             else:
                 total_score += 50
-        except:
-            total_score += 50
-            
-    final_score = int(total_score / len(headlines)) if headlines else 50
-    
+                
+        final_score = int(total_score / len(sentiments)) if sentiments else 50
+    except Exception as e:
+        print(f"Gemini sentiment analysis error: {e}")
+        final_score = 50
+        bullish_count = 0
+        bearish_count = 0
+        
     if final_score > 60:
-        summary = f"FinBERT Deep Learning NLP detected Bullish sentiment across {bullish_count} recent headlines."
+        summary = f"Gemini AI Sentiment analysis detected Bullish sentiment across {bullish_count} recent headlines."
     elif final_score < 40:
-        summary = f"FinBERT Deep Learning NLP detected Bearish sentiment across {bearish_count} recent headlines."
+        summary = f"Gemini AI Sentiment analysis detected Bearish sentiment across {bearish_count} recent headlines."
     else:
-        summary = "FinBERT Deep Learning NLP detected Neutral/Mixed sentiment in recent news."
+        summary = "Gemini AI Sentiment analysis detected Neutral/Mixed sentiment in recent news."
         
     return {"score": final_score, "summary": summary}
 

@@ -6,14 +6,12 @@ from typing import List, Dict
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import Chroma
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_google_genai import GoogleGenAIEmbeddings
 from langchain_community.document_loaders import WebBaseLoader
 
-# Initialize embedding model
-embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+# Initialize API-based Google embeddings (No PyTorch, 0MB local memory overhead)
+embeddings = GoogleGenAIEmbeddings(model="models/text-embedding-04", google_api_key=os.getenv("GEMINI_API_KEY", ""))
 
-# We will initialize Chroma DB in memory or local directory
-# For this project, we'll keep it in a local directory so it persists
 persist_directory = "chroma_db"
 vectorstore = None
 
@@ -30,7 +28,7 @@ STATIC_KNOWLEDGE = [
 def initialize_vectorstore():
     global vectorstore
     if not os.path.exists(persist_directory):
-        print("Initializing new Chroma Vector Store with static knowledge...")
+        print("Initializing new Chroma Vector Store with static knowledge and Google API embeddings...")
         vectorstore = Chroma.from_documents(
             documents=STATIC_KNOWLEDGE, 
             embedding=embeddings, 
@@ -54,13 +52,13 @@ def ingest_web_document(url: str):
     splits = text_splitter.split_documents(docs)
     
     vectorstore.add_documents(splits)
-    # Note: Chroma auto-persists in newer versions, but we can explicitly call it if using older versions
     if hasattr(vectorstore, "persist"):
         vectorstore.persist()
     print(f"Successfully ingested {len(splits)} chunks from {url} into RAG database.")
 
 def search_knowledge_base(query: str, k: int = 2) -> str:
     """Searches the static knowledge base for relevant financial concepts."""
+    global vectorstore
     if vectorstore is None:
         initialize_vectorstore()
         

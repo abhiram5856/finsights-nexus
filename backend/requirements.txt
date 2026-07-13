@@ -15,12 +15,10 @@ langchain
 langchain-openai
 ta
 chromadb
-sentence-transformers
 beautifulsoup4
 feedparser
 langchain-community
 langchain-google-genai
-transformers
 optuna
 langgraph
 langgraph-checkpoint-sqlite
