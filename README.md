@@ -66,6 +66,65 @@ To engineer a platform that:
 
 Finsights Nexus operates on a decoupled **Client-Server Microservice Architecture**.
 
+```mermaid
+graph TD
+    %% Define Styles
+    classDef frontend fill:#282c34,stroke:#61dafb,stroke-width:2px,color:#fff;
+    classDef backend fill:#009688,stroke:#004d40,stroke-width:2px,color:#fff;
+    classDef ai fill:#f2a900,stroke:#e65100,stroke-width:2px,color:#fff;
+    classDef db fill:#3ecf8e,stroke:#1b5e20,stroke-width:2px,color:#fff;
+    classDef ext fill:#1d9bf0,stroke:#01579b,stroke-width:2px,color:#fff;
+
+    subgraph Client [Frontend Layer]
+        UI[React.js UI / Vite]:::frontend
+        Context[Context API State]:::frontend
+        Charts[Recharts Graphs]:::frontend
+    end
+
+    subgraph Server [FastAPI Backend Layer]
+        API[RESTful Endpoints]:::backend
+        Auth[Supabase Auth Middleware]:::backend
+        Cache[TTLCache Manager]:::backend
+    end
+
+    subgraph Intelligence [AI & Quant Layer]
+        Agent[LangGraph Multi-Agent]:::ai
+        Model[AlphaEngine ML Model]:::ai
+        RAG[(ChromaDB Vector Store)]:::ai
+    end
+
+    subgraph Storage [Database Layer]
+        DB[(Supabase PostgreSQL)]:::db
+        RLS[Row Level Security]:::db
+    end
+
+    subgraph External [External APIs]
+        YF[Yahoo Finance]:::ext
+        DDG[DuckDuckGo Search]:::ext
+        LLM[Google Gemini API]:::ext
+    end
+
+    %% Connections
+    UI <-->|JSON over HTTPS| API
+    UI --> Charts
+    UI <--> Context
+
+    API --> Auth
+    Auth <--> RLS
+    RLS <--> DB
+
+    API <--> Cache
+    Cache <--> Agent
+    Cache <--> Model
+
+    Agent <-->|Embeddings| RAG
+    Agent <-->|Prompts| LLM
+    Agent <-->|Tools| YF
+    Agent <-->|Tools| DDG
+
+    Model <-->|Historical Data| YF
+```
+
 ### 1. The Presentation Layer (React/Vite)
 - A highly responsive, CSR (Client-Side Rendered) application built with **React 19** and **Vite**.
 - Uses **Tailwind CSS** for a custom "Fintech Blue" design system (glassmorphism, skeleton loaders).
