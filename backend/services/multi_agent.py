@@ -66,7 +66,7 @@ def quant_agent(state: AgentState):
     response = agent.invoke({"messages": messages})
     final_message = response["messages"][-1]
     text_content = _extract_text_content(final_message.content)
-    return {"messages": [{"role": "assistant", "content": f"Quant Agent: {text_content}"}]}
+    return {"messages": [{"role": "assistant", "content": text_content}]}
 
 # --- SUPERVISOR ---
 

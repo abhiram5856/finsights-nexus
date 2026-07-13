@@ -164,8 +164,14 @@ export default function Dashboard() {
                                         axisLine={false}
                                         tickLine={false}
                                         tick={{ fill: 'var(--text-muted)', fontSize: 9, fontWeight: 600 }}
-                                        tickFormatter={(val) => `₹${(val / 1000).toFixed(0)}k`}
-                                        width={35}
+                                        tickFormatter={(val) => {
+                                            const currencySymbols = {
+                                                USD: '$', EUR: '€', JPY: '¥', GBP: '£', INR: '₹', CNY: '¥', AUD: 'A$', CAD: 'C$', CHF: 'Fr'
+                                            };
+                                            const curSymbol = currencySymbols[selectedCurrency] || '$';
+                                            return `${curSymbol}${((val * getRate(selectedCurrency)) / 1000).toFixed(0)}k`;
+                                        }}
+                                        width={40}
                                     />
                                     <RechartsTooltip
                                         cursor={{ stroke: 'var(--accent-primary)', strokeWidth: 1, strokeDasharray: '4 4' }}

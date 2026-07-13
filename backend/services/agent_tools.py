@@ -24,6 +24,30 @@ class ChartQuery(BaseModel):
 class BacktestQuery(BaseModel):
     symbol: str = Field(description="The stock ticker symbol to backtest")
 
+def _resolve_symbol(symbol: str):
+    """
+    Check if symbol returns data. If not and it doesn't contain a dot,
+    try appending '.NS' to automatically support Indian tickers without user typing it.
+    Returns (ticker_object, period_1d_history, resolved_symbol_str).
+    """
+    symbol = symbol.upper().strip()
+    ticker = yf.Ticker(symbol)
+    try:
+        hist = ticker.history(period="1d")
+    except Exception:
+        hist = pd.DataFrame()
+        
+    if hist.empty and "." not in symbol:
+        try:
+            try_ticker = yf.Ticker(f"{symbol}.NS")
+            try_hist = try_ticker.history(period="1d")
+            if not try_hist.empty:
+                return try_ticker, try_hist, f"{symbol}.NS"
+        except Exception:
+            pass
+            
+    return ticker, hist, symbol
+
 @tool(args_schema=StockQuery)
 def get_stock_details(symbol: str) -> str:
     """
@@ -31,23 +55,25 @@ def get_stock_details(symbol: str) -> str:
     Always pass the full symbol with its exchange suffix (e.g., RELIANCE.NS, TCS.NS, AAPL).
     """
     try:
-        ticker = yf.Ticker(symbol)
-        info = ticker.info
-        hist = ticker.history(period="1d")
+        ticker, hist, resolved_symbol = _resolve_symbol(symbol)
         if hist.empty:
             return f"Could not find stock data for {symbol}. Make sure the symbol is correct."
             
+        info = ticker.info
         price = hist["Close"].iloc[-1]
         high = info.get("fiftyTwoWeekHigh", "N/A")
         low = info.get("fiftyTwoWeekLow", "N/A")
         sector = info.get("sector", "N/A")
-        short_name = info.get("shortName", symbol)
+        short_name = info.get("shortName", resolved_symbol)
         
-        return (f"Stock: {short_name} ({symbol})\n"
+        currency = info.get("currency", "USD")
+        curr_symbol = "₹" if currency == "INR" else "$" if currency == "USD" else f"{currency} "
+        
+        return (f"Stock: {short_name} ({resolved_symbol})\n"
                 f"Sector: {sector}\n"
-                f"Current Price: ₹{price:,.2f} (or $ if US stock)\n"
-                f"52-Week High: {high}\n"
-                f"52-Week Low: {low}")
+                f"Current Price: {curr_symbol}{price:,.2f}\n"
+                f"52-Week High: {curr_symbol}{high}\n"
+                f"52-Week Low: {curr_symbol}{low}")
     except Exception as e:
         return f"Error fetching details for {symbol}: {str(e)}"
 
@@ -58,9 +84,10 @@ def predict_stock_trend(symbol: str) -> str:
     Use this when the user asks for a forecast, prediction, or future trend of a stock.
     """
     try:
-        df = yf.download(symbol, period="1y", progress=False, auto_adjust=True)
+        ticker, hist, resolved_symbol = _resolve_symbol(symbol)
+        df = yf.download(resolved_symbol, period="1y", progress=False, auto_adjust=True)
         if df.empty:
-            return f"Could not fetch enough historical data to predict {symbol}."
+            return f"Could not fetch enough historical data to predict {resolved_symbol}."
             
         model = AlphaEngine(rf_estimators=50)
         model.fit(df)
@@ -68,9 +95,13 @@ def predict_stock_trend(symbol: str) -> str:
         future_pred = model.predict(days=7)
         dates = pd.date_range(df.index[-1], periods=8, freq="B")[1:]
         
-        result = f"7-Day Trend Forecast for {symbol}:\n"
+        info = ticker.info
+        currency = info.get("currency", "USD") if info else "USD"
+        curr_symbol = "₹" if currency == "INR" else "$" if currency == "USD" else f"{currency} "
+        
+        result = f"7-Day Trend Forecast for {resolved_symbol}:\n"
         for d, p in zip(dates, future_pred):
-            result += f"- {d.strftime('%Y-%m-%d')}: ₹{p:,.2f}\n"
+            result += f"- {d.strftime('%Y-%m-%d')}: {curr_symbol}{p:,.2f}\n"
             
         return result
     except Exception as e:
@@ -90,7 +121,8 @@ def fetch_latest_news(symbol: str) -> str:
     Fetches the latest real-time news headlines for a specific stock symbol.
     Use this when the user asks for recent news or why a stock is moving today.
     """
-    return get_live_stock_news(symbol)
+    ticker, hist, resolved_symbol = _resolve_symbol(symbol)
+    return get_live_stock_news(resolved_symbol)
 
 @tool(args_schema=StockQuery)
 def get_financial_statements(symbol: str) -> str:
@@ -99,11 +131,11 @@ def get_financial_statements(symbol: str) -> str:
     Use this when the user asks for fundamentals, revenue, profit, or balance sheet info.
     """
     try:
-        ticker = yf.Ticker(symbol)
+        ticker, hist, resolved_symbol = _resolve_symbol(symbol)
         inc = ticker.income_stmt
         bal = ticker.balance_sheet
         if inc is None or inc.empty or bal is None or bal.empty:
-            return f"Financial statements not available for {symbol}."
+            return f"Financial statements not available for {resolved_symbol}."
             
         recent_inc = inc.iloc[:, 0]
         recent_bal = bal.iloc[:, 0]
@@ -112,7 +144,7 @@ def get_financial_statements(symbol: str) -> str:
         net_inc = recent_inc.get("Net Income", "N/A")
         total_assets = recent_bal.get("Total Assets", "N/A")
         
-        return (f"Latest Financials for {symbol}:\n"
+        return (f"Latest Financials for {resolved_symbol}:\n"
                 f"Total Revenue: {rev}\n"
                 f"Net Income: {net_inc}\n"
                 f"Total Assets: {total_assets}")
@@ -126,12 +158,12 @@ def get_insider_trades(symbol: str) -> str:
     Use this to see if executives are bullish or bearish on their own company.
     """
     try:
-        ticker = yf.Ticker(symbol)
+        ticker, hist, resolved_symbol = _resolve_symbol(symbol)
         insider = ticker.insider_transactions
         if insider is None or insider.empty:
-            return f"No recent insider trades found for {symbol}."
+            return f"No recent insider trades found for {resolved_symbol}."
             
-        return f"Recent Insider Trades for {symbol}:\n{insider.head(3).to_string()}"
+        return f"Recent Insider Trades for {resolved_symbol}:\n{insider.head(3).to_string()}"
     except Exception as e:
         return f"Error fetching insider trades for {symbol}: {str(e)}"
 
