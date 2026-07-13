@@ -13,6 +13,7 @@ import { useState, useMemo } from 'react';
 import { BarChart3, Coins, Info, Loader2 } from 'lucide-react';
 
 const COLORS = ['#6366F1', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899'];
+const getSafeKey = (symbol) => symbol.replace(/\./g, '_');
 
 export default function ComparisonChart({ stocks, theme }) {
     const { selectedCurrency, getRate, isLoading: ratesLoading } = useCurrency();
@@ -51,6 +52,7 @@ export default function ComparisonChart({ stocks, theme }) {
         stocks.forEach((stock) => {
             const history = stock.price_history_6m || [];
             const conversionFactor = getConversionFactor(stock.currency);
+            const safeSymbol = getSafeKey(stock.symbol);
 
             history.forEach((p) => {
                 if (!dateMap[p.date]) {
@@ -61,11 +63,11 @@ export default function ComparisonChart({ stocks, theme }) {
                 const normalizedVal = base ? ((p.price / base) * 100) : 100;
                 const convertedPrice = p.price * conversionFactor;
 
-                dateMap[p.date][`${stock.symbol}_norm`] = normalizedVal;
-                dateMap[p.date][`${stock.symbol}_actual`] = convertedPrice;
+                dateMap[p.date][`${safeSymbol}_norm`] = normalizedVal;
+                dateMap[p.date][`${safeSymbol}_actual`] = convertedPrice;
 
                 // Active plotting key depends on mode
-                dateMap[p.date][stock.symbol] = chartMode === 'normalized' ? normalizedVal : convertedPrice;
+                dateMap[p.date][safeSymbol] = chartMode === 'normalized' ? normalizedVal : convertedPrice;
             });
         });
 
@@ -161,27 +163,28 @@ export default function ComparisonChart({ stocks, theme }) {
                                             <div className="space-y-3">
                                                 {payload.map((entry, index) => {
                                                     const dataPoint = entry.payload;
-                                                    const norm = dataPoint[`${entry.name}_norm`];
-                                                    const actual = dataPoint[`${entry.name}_actual`];
+                                                    const safeName = getSafeKey(entry.name);
+                                                    const norm = dataPoint[`${safeName}_norm`];
+                                                    const actual = dataPoint[`${safeName}_actual`];
                                                     const change = norm - 100;
-
+ 
                                                     return (
                                                         <div key={index} className="flex flex-col gap-0.5">
                                                             <div className="flex items-center justify-between gap-4">
-                                                                <div className="flex items-center gap-2">
-                                                                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: entry.color }} />
-                                                                    <span className="text-xs font-black text-[var(--text-main)]">{entry.name}</span>
-                                                                </div>
-                                                                <span className={`text-[10px] font-black px-1.5 py-0.5 rounded ${change >= 0 ? 'bg-emerald-500/10 text-emerald-500' : 'bg-rose-500/10 text-rose-500'}`}>
-                                                                    {change >= 0 ? '+' : ''}{change.toFixed(2)}%
-                                                                </span>
+                                                                 <div className="flex items-center gap-2">
+                                                                     <div className="w-2 h-2 rounded-full" style={{ backgroundColor: entry.color }} />
+                                                                     <span className="text-xs font-black text-[var(--text-main)]">{entry.name}</span>
+                                                                 </div>
+                                                                 <span className={`text-[10px] font-black px-1.5 py-0.5 rounded ${change >= 0 ? 'bg-emerald-500/10 text-emerald-500' : 'bg-rose-500/10 text-rose-500'}`}>
+                                                                     {change >= 0 ? '+' : ''}{change.toFixed(2)}%
+                                                                 </span>
                                                             </div>
                                                             <div className="flex items-center justify-between text-[11px] font-bold text-[var(--text-muted)] ml-4">
                                                                 <span>Price:</span>
                                                                 <span>{selectedCurrency} {actual.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                                                             </div>
                                                         </div>
-                                                    );
+                                                     );
                                                 })}
                                             </div>
                                         </div>
@@ -205,26 +208,30 @@ export default function ComparisonChart({ stocks, theme }) {
                                 </div>
                             )}
                         />
-                        {stocks.map((stock, index) => (
-                            <Line
-                                key={stock.symbol}
-                                type="monotone"
-                                dataKey={stock.symbol}
-                                stroke={COLORS[index % COLORS.length]}
-                                strokeWidth={4}
-                                dot={false}
-                                connectNulls={true}
-                                activeDot={{
-                                    r: 8,
-                                    strokeWidth: 4,
-                                    stroke: isDark ? '#020617' : '#ffffff',
-                                    fill: COLORS[index % COLORS.length],
-                                    style: { filter: `drop-shadow(0 0 12px ${COLORS[index % COLORS.length]})` }
-                                }}
-                                animationDuration={1000}
-                                animationEasing="ease-in-out"
-                            />
-                        ))}
+                        {stocks.map((stock, index) => {
+                            const safeSymbol = getSafeKey(stock.symbol);
+                            return (
+                                <Line
+                                    key={stock.symbol}
+                                    type="monotone"
+                                    dataKey={safeSymbol}
+                                    name={stock.symbol}
+                                    stroke={COLORS[index % COLORS.length]}
+                                    strokeWidth={4}
+                                    dot={false}
+                                    connectNulls={true}
+                                    activeDot={{
+                                        r: 8,
+                                        strokeWidth: 4,
+                                        stroke: isDark ? '#020617' : '#ffffff',
+                                        fill: COLORS[index % COLORS.length],
+                                        style: { filter: `drop-shadow(0 0 12px ${COLORS[index % COLORS.length]})` }
+                                    }}
+                                    animationDuration={1000}
+                                    animationEasing="ease-in-out"
+                                />
+                            );
+                        })}
                     </LineChart>
                 </ResponsiveContainer>
             </div>
