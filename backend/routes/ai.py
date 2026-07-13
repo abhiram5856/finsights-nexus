@@ -75,6 +75,9 @@ async def chat_with_nexus(req: ChatRequest):
         
         return {"response": output}
     except Exception as e:
+        print(f"Error in chat_with_nexus endpoint: {e}")
+        import traceback
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
 
 from langchain_google_genai import ChatGoogleGenerativeAI

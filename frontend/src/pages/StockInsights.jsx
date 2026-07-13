@@ -1,20 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useStockInsights } from '../hooks/useStockInsights';
-
-const POPULAR_TICKERS = [
-    { symbol: '', name: 'Select a stock to analyze...' },
-    { symbol: 'AAPL', name: 'Apple Inc. (AAPL)' },
-    { symbol: 'MSFT', name: 'Microsoft Corp. (MSFT)' },
-    { symbol: 'NVDA', name: 'NVIDIA Corp. (NVDA)' },
-    { symbol: 'TSLA', name: 'Tesla Inc. (TSLA)' },
-    { symbol: 'AMZN', name: 'Amazon.com (AMZN)' },
-    { symbol: 'GOOGL', name: 'Alphabet Inc. (GOOGL)' },
-    { symbol: 'RELIANCE.NS', name: 'Reliance Industries (RELIANCE)' },
-    { symbol: 'TCS.NS', name: 'Tata Consultancy Services (TCS)' },
-    { symbol: 'HDFCBANK.NS', name: 'HDFC Bank (HDFCBANK)' },
-    { symbol: 'INFY.NS', name: 'Infosys (INFY)' },
-    { symbol: 'BTC-USD', name: 'Bitcoin (BTC)' },
-];
+import StockAutocomplete from '../components/StockAutocomplete';
 import { useCurrency } from '../context/CurrencyContext';
 import { formatCurrency } from '../utils/formatCurrency';
 import {
@@ -29,6 +15,18 @@ import {
   Bar,
 } from 'recharts';
 import { Bot, Search, TrendingUp, TrendingDown, Activity, Loader2 } from 'lucide-react';
+
+const POPULAR_TICKERS = [
+    { symbol: 'AAPL', name: 'Apple' },
+    { symbol: 'MSFT', name: 'Microsoft' },
+    { symbol: 'NVDA', name: 'Nvidia' },
+    { symbol: 'TSLA', name: 'Tesla' },
+    { symbol: 'RELIANCE.NS', name: 'Reliance' },
+    { symbol: 'TCS.NS', name: 'TCS' },
+    { symbol: 'HDFCBANK.NS', name: 'HDFC' },
+    { symbol: 'INFY.NS', name: 'Infosys' },
+    { symbol: 'BTC-USD', name: 'Bitcoin' },
+];
 
 export default function StockInsights({ theme, selectedTicker }) {
   const { selectedCurrency, getRate } = useCurrency();
@@ -58,6 +56,12 @@ export default function StockInsights({ theme, selectedTicker }) {
       autocompleteRef.current.close();
     }
     fetchStock(ticker);
+  };
+
+  const handleSelectStock = (symbol) => {
+    if (!symbol) return;
+    setTicker(symbol);
+    fetchStock(symbol);
   };
 
   const renderCards = () => {
@@ -206,7 +210,7 @@ export default function StockInsights({ theme, selectedTicker }) {
             : 'bg-[#EF4444]/10 text-[#EF4444] border-[#EF4444]/20 shadow-sm shadow-[#EF4444]/5'
             }`}
         >
-          <Bot className="mr-2" size={16} /> AI Sentiment: {data.trend_signal} ({data.sentiment_score}/100)
+          <Bot className="mr-2" size={16} /> AI Sentiment: {data.trend_signal}
         </div>
       </div>
     );
@@ -229,11 +233,44 @@ export default function StockInsights({ theme, selectedTicker }) {
   return (
     <div className="max-w-7xl mx-auto space-y-6 md:space-y-8 pb-10 px-0 md:px-2">
       {/* search bar */}
-      <div className="glass-panel p-5 md:p-8 rounded-2xl md:rounded-3xl shadow-xl flex flex-col items-stretch gap-4 md:gap-6 transition-all duration-300">
-        <div className="flex flex-col gap-3">
-          <span className="text-[11px] font-bold text-[var(--text-muted)] uppercase tracking-wider mb-1">Select Asset to Analyze:</span>
+      <div className="glass-panel p-5 md:p-8 rounded-2xl md:rounded-3xl shadow-xl flex flex-col items-stretch gap-5 md:gap-6 transition-all duration-300">
+        
+        {/* Search controls */}
+        <div className="flex flex-col md:flex-row gap-4 items-end w-full">
+          <div className="flex-1 w-full">
+            <label className="text-[11px] font-bold text-[var(--text-muted)] uppercase tracking-wider mb-2 block">Search Indian Stocks (A-Z):</label>
+            <StockAutocomplete 
+                onSelect={(symbol) => handleSelectStock(symbol)}
+                clearOnSelect={false}
+                placeholder="Search stock to analyze (e.g. RELIANCE, TCS)..."
+            />
+          </div>
+          <form onSubmit={(e) => { e.preventDefault(); fetchData(); }} className="flex gap-2 w-full md:w-auto items-end">
+            <div className="flex-1 md:flex-initial">
+              <label className="text-[11px] font-bold text-[var(--text-muted)] uppercase tracking-wider mb-2 block">Or Type Ticker (US/Crypto):</label>
+              <input 
+                  type="text" 
+                  value={ticker}
+                  onChange={(e) => setTicker(e.target.value)}
+                  placeholder="e.g. AAPL, BTC-USD"
+                  className="bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)]/50 focus:border-[var(--accent-primary)] transition-all placeholder:text-[var(--text-muted)] text-[var(--text-main)] font-medium w-full md:w-44"
+              />
+            </div>
+            <button 
+                type="submit"
+                className="bg-[var(--accent-primary)] hover:brightness-110 text-white px-5 py-3 rounded-xl font-bold transition-all flex items-center justify-center gap-2 shadow-md shadow-[var(--accent-primary)]/20 w-full md:w-auto touch-target"
+            >
+                <Search size={18} />
+                Analyze
+            </button>
+          </form>
+        </div>
+
+        {/* Quick Select Buttons */}
+        <div className="flex flex-col gap-2">
+          <span className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider">Quick Select:</span>
           <div className="flex flex-wrap gap-2 w-full">
-            {POPULAR_TICKERS.filter(pt => pt.symbol).map(pt => (
+            {POPULAR_TICKERS.map(pt => (
                 <button
                     key={pt.symbol}
                     onClick={() => {
@@ -242,11 +279,12 @@ export default function StockInsights({ theme, selectedTicker }) {
                     }}
                     className={`px-3 py-1.5 text-xs font-bold border rounded-xl transition-all shadow-sm ${ticker === pt.symbol ? 'bg-[var(--accent-primary)] text-white border-[var(--accent-primary)] shadow-md shadow-[var(--accent-primary)]/20' : 'bg-[var(--bg-primary)] border-[var(--border-color)] text-[var(--text-muted)] hover:text-[var(--text-main)] hover:border-[var(--accent-primary)] hover:bg-[var(--accent-primary)]/10'}`}
                 >
-                    {pt.name}
+                    {pt.symbol}
                 </button>
             ))}
           </div>
         </div>
+
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-t border-[var(--border-color)] pt-5 md:pt-6 gap-4">
           <div className="flex items-center gap-3 md:gap-4">
             <div className="w-10 h-10 rounded-xl bg-[var(--accent-primary)]/10 flex items-center justify-center text-[var(--accent-primary)] flex-shrink-0">
