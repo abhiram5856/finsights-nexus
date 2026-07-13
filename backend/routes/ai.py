@@ -71,8 +71,20 @@ async def chat_with_nexus(req: ChatRequest):
         
         # Extract the last generated message from the state
         last_msg = response["messages"][-1]
-        output = last_msg.content if hasattr(last_msg, 'content') else str(last_msg.get('content', last_msg))
+        content = last_msg.content if hasattr(last_msg, 'content') else last_msg.get('content', last_msg)
         
+        if isinstance(content, list):
+            text_parts = []
+            for part in content:
+                if isinstance(part, dict):
+                    if part.get("type") == "text":
+                        text_parts.append(part.get("text", ""))
+                elif isinstance(part, str):
+                    text_parts.append(part)
+            output = "".join(text_parts)
+        else:
+            output = str(content)
+            
         return {"response": output}
     except Exception as e:
         print(f"Error in chat_with_nexus endpoint: {e}")

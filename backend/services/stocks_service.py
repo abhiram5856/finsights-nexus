@@ -101,6 +101,10 @@ def get_multi_stock_comparison(tickers: List[str]) -> List[dict]:
             high_52 = info.get("fiftyTwoWeekHigh") or getattr(fast, "year_high", None) or (float(hist["High"].max()) if not hist.empty else None)
             low_52 = info.get("fiftyTwoWeekLow") or getattr(fast, "year_low", None) or (float(hist["Low"].min()) if not hist.empty else None)
 
+            current_price = getattr(fast, "last_price", None) or (float(hist["Close"].iloc[-1]) if not hist.empty else None)
+            prev_price = float(hist["Close"].iloc[-2]) if len(hist) >= 2 else current_price
+            change_percent = ((current_price - prev_price) / prev_price) * 100 if prev_price and current_price else 0
+
             data = {
                 "symbol": symbol,
                 "currency": info.get("currency") or getattr(fast, "currency", "USD"),
@@ -110,7 +114,9 @@ def get_multi_stock_comparison(tickers: List[str]) -> List[dict]:
                 "six_month_performance": safe_float(perf_6m),
                 "fiftyTwoWeekHigh": safe_float(high_52),
                 "fiftyTwoWeekLow": safe_float(low_52),
-                "price_history_6m": price_history_6m
+                "price_history_6m": price_history_6m,
+                "current_price": safe_float(current_price),
+                "change_percent": safe_float(change_percent)
             }
             
             _cache[f"compare_{symbol}"] = {"expiry": now + CACHE_TTL, "data": data}

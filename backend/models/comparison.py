@@ -20,6 +20,8 @@ class StockComparisonData(BaseModel):
     fiftyTwoWeekHigh: Optional[float] = None
     fiftyTwoWeekLow: Optional[float] = None
     price_history_6m: List[ComparisonPricePoint]
+    current_price: Optional[float] = None
+    change_percent: Optional[float] = None
 
 
 class ComparisonResponse(BaseModel):

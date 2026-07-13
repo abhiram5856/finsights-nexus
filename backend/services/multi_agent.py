@@ -25,7 +25,8 @@ def get_llm():
 def research_agent(state: AgentState):
     """Agent responsible for gathering news and macroeconomic knowledge."""
     llm = get_llm()
-    tools = [fetch_latest_news, search_financial_knowledge]
+    from services.agent_tools import search_the_web
+    tools = [fetch_latest_news, search_financial_knowledge, search_the_web]
     # create_react_agent handles the tool calling loop
     agent = create_react_agent(llm, tools)
     
