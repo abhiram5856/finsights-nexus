@@ -6,11 +6,11 @@ from typing import List, Dict
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import Chroma
-from langchain_google_genai import GoogleGenAIEmbeddings
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_community.document_loaders import WebBaseLoader
 
 # Initialize API-based Google embeddings (No PyTorch, 0MB local memory overhead)
-embeddings = GoogleGenAIEmbeddings(model="models/text-embedding-04", google_api_key=os.getenv("GEMINI_API_KEY", ""))
+embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-04", google_api_key=os.getenv("GEMINI_API_KEY", ""))
 
 persist_directory = "chroma_db"
 vectorstore = None
