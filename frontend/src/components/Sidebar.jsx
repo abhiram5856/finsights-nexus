@@ -16,7 +16,9 @@ import {
     Wallet,
     Landmark,
     ChevronDown,
-    Eye
+    Eye,
+    SlidersHorizontal,
+    Newspaper
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -33,11 +35,13 @@ export default function Sidebar({ isOpen, setIsOpen, theme }) {
     };
 
     const menuItems = [
-        { name: "Dashboard", icon: <LayoutDashboard size={20} />, path: "/dashboard" },
-        { name: "Stock Insights", icon: <LineChart size={20} />, path: "/stockinsights" },
-        { name: "Compare", icon: <TrendingUp size={20} />, path: "/compare" },
-        { name: "Portfolio", icon: <Briefcase size={20} />, path: "/portfolio" },
-        { name: "Watchlist", icon: <Eye size={20} />, path: "/watchlist" }
+        { name: "Dashboard",    icon: <LayoutDashboard size={20} />, path: "/dashboard" },
+        { name: "Stock Insights",icon: <LineChart size={20} />,       path: "/stockinsights" },
+        { name: "Compare",       icon: <TrendingUp size={20} />,       path: "/compare" },
+        { name: "Screener",      icon: <SlidersHorizontal size={20} />,path: "/screener" },
+        { name: "Portfolio",     icon: <Briefcase size={20} />,        path: "/portfolio" },
+        { name: "Watchlist",     icon: <Eye size={20} />,              path: "/watchlist" },
+        { name: "News Feed",     icon: <Newspaper size={20} />,        path: "/news" },
     ];
 
     return (

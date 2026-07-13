@@ -6,6 +6,8 @@ import StockInsights from './pages/StockInsights';
 import Compare from './pages/Compare';
 import Portfolio from './pages/Portfolio';
 import Watchlist from './pages/Watchlist';
+import Screener from './pages/Screener';
+import NewsFeed from './pages/NewsFeed';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import VerifyEmail from './pages/VerifyEmail';
@@ -74,6 +76,8 @@ function App() {
                       <Route path="/compare" element={<Compare theme={theme} />} />
                       <Route path="/portfolio" element={<Portfolio theme={theme} />} />
                       <Route path="/watchlist" element={<Watchlist theme={theme} />} />
+                      <Route path="/screener" element={<Screener theme={theme} />} />
+                      <Route path="/news" element={<NewsFeed theme={theme} />} />
                       <Route path="*" element={<Navigate to="/dashboard" replace />} />
                     </Routes>
                   </main>

@@ -3,7 +3,7 @@ load_dotenv()
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routes import portfolio, ai, stocks, search, expenses, user, market
+from routes import portfolio, ai, stocks, search, expenses, user, market, screener
 
 app = FastAPI()
 
@@ -34,6 +34,7 @@ app.include_router(search.router, prefix="/api/search")
 app.include_router(expenses.router, prefix="/api/expenses")
 app.include_router(user.router, prefix="/api/user")
 app.include_router(market.router, prefix="/api/market")
+app.include_router(screener.router, prefix="/api/screener")
 app.include_router(ai.router, prefix="/api/ai")
 
 @app.get("/")

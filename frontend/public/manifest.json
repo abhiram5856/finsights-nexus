@@ -1,0 +1,56 @@
+{
+  "name": "Finsights Nexus",
+  "short_name": "Nexus",
+  "description": "AI-powered stock market intelligence and portfolio management",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#6366f1",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/logo.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/logo.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "form_factor": "wide"
+    }
+  ],
+  "categories": ["finance", "business", "productivity"],
+  "lang": "en-US",
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "url": "/dashboard",
+      "description": "View your portfolio dashboard"
+    },
+    {
+      "name": "Stock Insights",
+      "url": "/stockinsights",
+      "description": "Analyse any stock"
+    },
+    {
+      "name": "Market Screener",
+      "url": "/screener",
+      "description": "Screen global markets"
+    },
+    {
+      "name": "News Feed",
+      "url": "/news",
+      "description": "Latest financial news"
+    }
+  ]
+}

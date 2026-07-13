@@ -188,3 +188,96 @@ def get_market_status():
             "hours": "09:30 – 16:00 ET"
         }
     }
+
+
+# ── Email Alert Checker (called periodically or on-demand) ─────────────────────
+
+def _send_alert_email(to_email: str, symbol: str, condition: str, target: float, current: float, note: str = ""):
+    """Send price alert email via Resend API. Falls back to console log if no API key."""
+    import os
+    api_key = os.getenv("RESEND_API_KEY")
+    direction = "above" if condition == "above" else "below"
+    subject = f"Price Alert Triggered: {symbol} is {direction} {target}"
+    body = f"""
+    <h2 style="color:#6366F1;">Finsights Nexus — Price Alert</h2>
+    <p>Your alert for <strong>{symbol}</strong> has been triggered.</p>
+    <table style="border-collapse:collapse;font-family:sans-serif;">
+        <tr><td style="padding:6px 12px;color:#888;">Symbol</td><td style="padding:6px 12px;font-weight:bold;">{symbol}</td></tr>
+        <tr><td style="padding:6px 12px;color:#888;">Condition</td><td style="padding:6px 12px;">{symbol} moved {direction} ₹{target}</td></tr>
+        <tr><td style="padding:6px 12px;color:#888;">Current Price</td><td style="padding:6px 12px;font-weight:bold;color:#10B981;">₹{current:,.2f}</td></tr>
+        {'<tr><td style="padding:6px 12px;color:#888;">Note</td><td style="padding:6px 12px;">' + note + '</td></tr>' if note else ''}
+    </table>
+    <p style="color:#888;font-size:12px;margin-top:24px;">Finsights Nexus · Automated Alert System</p>
+    """
+    if not api_key:
+        print(f"[Alert] Would email {to_email}: {subject}")
+        return False
+
+    try:
+        import requests as _req
+        resp = _req.post(
+            "https://api.resend.com/emails",
+            headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
+            json={
+                "from": "Nexus Alerts <alerts@yourdomain.com>",
+                "to": [to_email],
+                "subject": subject,
+                "html": body,
+            },
+            timeout=10
+        )
+        return resp.status_code in (200, 201)
+    except Exception as e:
+        print(f"Email send error: {e}")
+        return False
+
+
+@router.post("/alerts/check")
+def check_and_fire_alerts(request: Request):
+    """
+    Checks all un-triggered alerts against live prices.
+    Sends email if triggered. Mark alert as triggered.
+    Can be called via a scheduled task or manually.
+    """
+    import yfinance as yf
+
+    try:
+        auth_header = request.headers.get("Authorization")
+        token = auth_header.split(" ")[1] if auth_header else None
+        # Use service role or admin client to scan all users' alerts
+        supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+
+        # Fetch all un-triggered alerts
+        result = supabase.table("price_alerts").select("*, auth.users!inner(email)").eq("triggered", False).execute()
+        alerts_data = result.data or []
+
+        triggered_count = 0
+        for alert in alerts_data:
+            symbol = alert["symbol"]
+            target = float(alert["target_price"])
+            condition = alert["condition"]
+            user_email = alert.get("auth.users", {}).get("email") or ""
+
+            # Fetch current price
+            try:
+                ticker = yf.Ticker(symbol)
+                hist = ticker.history(period="1d")
+                if hist.empty:
+                    continue
+                current_price = float(hist["Close"].iloc[-1])
+            except Exception:
+                continue
+
+            # Check condition
+            fired = (condition == "above" and current_price > target) or \
+                    (condition == "below" and current_price < target)
+
+            if fired:
+                _send_alert_email(user_email, symbol, condition, target, current_price, alert.get("note", ""))
+                supabase.table("price_alerts").update({"triggered": True}).eq("id", alert["id"]).execute()
+                triggered_count += 1
+
+        return {"checked": len(alerts_data), "triggered": triggered_count}
+    except Exception as e:
+        print(f"Alert check error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
