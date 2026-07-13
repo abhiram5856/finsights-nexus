@@ -93,7 +93,7 @@ def _get_cached_sentiment(symbol: str):
     headlines = [n.get('title', '') for n in news_list[:10]]
     
     try:
-        llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", temperature=0, api_key=os.getenv("GEMINI_API_KEY", ""))
+        llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0, api_key=os.getenv("GEMINI_API_KEY", ""))
         
         prompt = (
             "You are a financial sentiment analysis tool. Analyze the following stock headlines "
@@ -184,7 +184,7 @@ class AnalyzePortfolioResponse(BaseModel):
 async def analyze_portfolio(req: AnalyzePortfolioRequest):
     try:
         def _invoke_analysis():
-            llm = ChatGoogleGenerativeAI(model="gemini-1.5-pro", temperature=0, api_key=os.getenv("GEMINI_API_KEY", ""))
+            llm = ChatGoogleGenerativeAI(model="gemini-2.5-pro", temperature=0, api_key=os.getenv("GEMINI_API_KEY", ""))
             structured_llm = llm.with_structured_output(AnalyzePortfolioResponse)
             
             prompt = ChatPromptTemplate.from_messages([

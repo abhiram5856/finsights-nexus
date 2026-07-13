@@ -10,7 +10,7 @@ from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_community.document_loaders import WebBaseLoader
 
 # Initialize API-based Google embeddings (No PyTorch, 0MB local memory overhead)
-embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-04", google_api_key=os.getenv("GEMINI_API_KEY", ""))
+embeddings = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001", google_api_key=os.getenv("GEMINI_API_KEY", ""))
 
 persist_directory = "chroma_db"
 vectorstore = None

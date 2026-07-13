@@ -18,7 +18,7 @@ class AgentState(TypedDict):
 
 # Initialize Gemini LLM
 def get_llm():
-    return ChatGoogleGenerativeAI(model="gemini-1.5-flash", temperature=0, api_key=os.getenv("GEMINI_API_KEY", ""))
+    return ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0, api_key=os.getenv("GEMINI_API_KEY", ""))
 
 # --- WORKER AGENTS ---
 
