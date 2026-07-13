@@ -27,3 +27,4 @@ langchain-experimental
 cachetools
 python-multipart
 pytz
+redis

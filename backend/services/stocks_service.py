@@ -4,13 +4,11 @@ import yfinance as yf
 import pandas as pd
 import numpy as np
 from sklearn.linear_model import LinearRegression
-
-# simple in-memory cache
-_cache: dict = {}
-CACHE_TTL = timedelta(minutes=5)
-
+from services.cache import cache_get, cache_set
 
 import math
+
+CACHE_TTL_SECONDS = 300  # 5 minutes
 
 def safe_float(val):
     if val is None:
@@ -32,20 +30,43 @@ def _slice_last_six_months(df: pd.DataFrame) -> pd.DataFrame:
     return df[df.index >= cutoff]
 
 
-
+def get_stock_currency(symbol: str) -> str:
+    """
+    Fetch and cache the native currency of a stock symbol.
+    Cached for 1 hour since currency doesn't change frequently.
+    """
+    cache_key = f"currency_{symbol.upper()}"
+    cached = cache_get(cache_key)
+    if cached:
+        return cached
+    
+    try:
+        ticker = yf.Ticker(symbol)
+        fast = ticker.fast_info
+        currency = getattr(fast, "currency", None)
+        if not currency:
+            try:
+                info = ticker.info
+                currency = info.get("currency", "USD")
+            except Exception:
+                currency = "USD"
+    except Exception:
+        currency = "USD"
+    
+    cache_set(cache_key, currency, ttl=3600)  # cache for 1 hour
+    return currency
 
 
 def get_multi_stock_comparison(tickers: List[str]) -> List[dict]:
-    now = datetime.now(timezone.utc)
     results = []
 
     rate_limited = False
     for symbol in tickers:
         symbol = symbol.upper()
-        # check cache
-        cached = _cache.get(f"compare_{symbol}")
-        if cached and cached["expiry"] > now:
-            results.append(cached["data"])
+        cache_key = f"compare_{symbol}"
+        cached = cache_get(cache_key)
+        if cached:
+            results.append(cached)
             continue
 
         try:
@@ -94,9 +115,9 @@ def get_multi_stock_comparison(tickers: List[str]) -> List[dict]:
             dividend_yield = info.get("dividendYield")
             if dividend_yield is None:
                 div_rate = info.get("dividendRate")
-                current_price = info.get("currentPrice") or getattr(fast, "last_price", None)
-                if div_rate and current_price:
-                    dividend_yield = div_rate / current_price
+                current_price_val = info.get("currentPrice") or getattr(fast, "last_price", None)
+                if div_rate and current_price_val:
+                    dividend_yield = div_rate / current_price_val
 
             high_52 = info.get("fiftyTwoWeekHigh") or getattr(fast, "year_high", None) or (float(hist["High"].max()) if not hist.empty else None)
             low_52 = info.get("fiftyTwoWeekLow") or getattr(fast, "year_low", None) or (float(hist["Low"].min()) if not hist.empty else None)
@@ -119,7 +140,7 @@ def get_multi_stock_comparison(tickers: List[str]) -> List[dict]:
                 "change_percent": safe_float(change_percent)
             }
             
-            _cache[f"compare_{symbol}"] = {"expiry": now + CACHE_TTL, "data": data}
+            cache_set(cache_key, data, ttl=CACHE_TTL_SECONDS)
             results.append(data)
 
         except Exception as e:
@@ -135,10 +156,10 @@ def get_multi_stock_comparison(tickers: List[str]) -> List[dict]:
 
 
 def get_stock_insights(ticker_symbol: str) -> dict:
-    now = datetime.now(timezone.utc)
-    cached = _cache.get(ticker_symbol)
-    if cached and cached["expiry"] > now:
-        return cached["data"]
+    cache_key = f"insights_{ticker_symbol.upper()}"
+    cached = cache_get(cache_key)
+    if cached:
+        return cached
 
     try:
         ticker = yf.Ticker(ticker_symbol)
@@ -196,7 +217,6 @@ def get_stock_insights(ticker_symbol: str) -> dict:
         preds_list = []
         avg_pred = None
     else:
-        # encode days as integers
         closes["day"] = np.arange(len(closes))
         X = closes[["day"]].values
         y = closes["Close"].values
@@ -231,5 +251,5 @@ def get_stock_insights(ticker_symbol: str) -> dict:
         "currency": currency,
     }
 
-    _cache[ticker_symbol] = {"expiry": now + CACHE_TTL, "data": response}
+    cache_set(cache_key, response, ttl=CACHE_TTL_SECONDS)
     return response

@@ -13,11 +13,10 @@ router = APIRouter()
 
 from typing import Optional, List
 import asyncio
-from cachetools import TTLCache, cached
+from services.cache import cache_get, cache_set
 
-# Create caches (1 hour TTL, max 100 items)
-prediction_cache = TTLCache(maxsize=100, ttl=3600)
-sentiment_cache = TTLCache(maxsize=100, ttl=3600)
+SENTIMENT_TTL = 3600   # 1 hour
+PREDICTION_TTL = 3600  # 1 hour
 
 class ChatRequest(BaseModel):
     prompt: str
@@ -27,15 +26,19 @@ class SentimentResponse(BaseModel):
     score: int
     summary: str
 
-@cached(cache=prediction_cache)
 def _get_cached_prediction(symbol: str, days: int = 7):
+    cache_key = f"predict_{symbol.upper()}_{days}"
+    cached = cache_get(cache_key)
+    if cached is not None:
+        return cached
     df = yf.download(symbol, period="1y", progress=False, auto_adjust=True)
     if df.empty:
         raise ValueError("Stock data not found")
-        
     model = AlphaEngine(rf_estimators=100)
     model.fit(df)
-    return model.predict(days=days).tolist()
+    result = model.predict(days=days).tolist()
+    cache_set(cache_key, result, ttl=PREDICTION_TTL)
+    return result
 
 @router.post("/predict/{symbol}")
 async def predict_stock(symbol: str, days: int = 7):
@@ -95,12 +98,18 @@ async def chat_with_nexus(req: ChatRequest):
 from langchain_google_genai import ChatGoogleGenerativeAI
 import json
 
-@cached(cache=sentiment_cache)
 def _get_cached_sentiment(symbol: str):
+    cache_key = f"sentiment_{symbol.upper()}"
+    cached_result = cache_get(cache_key)
+    if cached_result is not None:
+        return cached_result
+    
     ticker = yf.Ticker(symbol)
     news_list = ticker.news
     if not news_list:
-        return {"score": 50, "summary": "No recent news found for this stock."}
+        result = {"score": 50, "summary": "No recent news found for this stock."}
+        cache_set(cache_key, result, ttl=SENTIMENT_TTL)
+        return result
         
     headlines = [n.get('title', '') for n in news_list[:10]]
     
@@ -158,8 +167,10 @@ def _get_cached_sentiment(symbol: str):
         summary = f"Core sentiment analysis detected bearish trend indicators across {bearish_count} recent headlines."
     else:
         summary = "Core sentiment analysis detected neutral or mixed indicators in recent headlines."
-        
-    return {"score": final_score, "summary": summary}
+
+    result = {"score": final_score, "summary": summary}
+    cache_set(cache_key, result, ttl=SENTIMENT_TTL)
+    return result
 
 @router.get("/sentiment/{symbol}", response_model=SentimentResponse)
 async def get_sentiment(symbol: str):
