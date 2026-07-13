@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import StockAutocomplete from '../components/StockAutocomplete';
 import { supabase } from '../lib/supabase';
-import { PieChart as PieChartIcon, Search, Plus, List, ArrowUpRight, TrendingUp, TrendingDown, RefreshCw, Briefcase, Trash2, X, AlertTriangle, Zap, CheckCircle2, Loader2, Globe } from 'lucide-react';
+import { PieChart as PieChartIcon, Search, Plus, List, ArrowUpRight, TrendingUp, TrendingDown, RefreshCw, Briefcase, Trash2, X, AlertTriangle, Zap, CheckCircle2, Loader2, Globe, Download } from 'lucide-react';
 import { AreaChart, Area, PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip } from 'recharts';
 import api from '../services/api';
 import { useCurrency } from '../context/CurrencyContext';
@@ -226,14 +226,33 @@ export default function Portfolio({ theme }) {
                         Track and optimize your global investment distribution
                     </p>
                 </div>
-                <button
-                    onClick={() => setIsModalOpen(true)}
-                    className="w-full sm:w-auto bg-[var(--accent-primary)] text-white px-6 py-3.5 md:py-3 rounded-xl md:rounded-2xl font-black flex items-center justify-center gap-2 hover:scale-[1.05] active:scale-[0.95] transition-all shadow-lg shadow-[var(--accent-primary)]/25"
-                >
-                    <Plus size={20} />
-                    Add Stock
-                </button>
-            </div>
+                <div className="flex gap-2 w-full sm:w-auto">
+                    <button
+                        onClick={async () => {
+                            try {
+                                const res = await api.get('/portfolio/export/csv', { responseType: 'blob' });
+                                const url = window.URL.createObjectURL(new Blob([res.data]));
+                                const link = document.createElement('a');
+                                link.href = url;
+                                link.setAttribute('download', `portfolio_${new Date().toISOString().slice(0,10)}.csv`);
+                                document.body.appendChild(link);
+                                link.click();
+                                link.remove();
+                            } catch (err) { console.error('Export failed', err); }
+                        }}
+                        className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-muted)] hover:text-[var(--accent-primary)] hover:border-[var(--accent-primary)] px-4 py-3 rounded-xl font-bold transition-all"
+                    >
+                        <Download size={18} />
+                        Export CSV
+                    </button>
+                    <button
+                        onClick={() => setIsModalOpen(true)}
+                        className="w-full sm:w-auto bg-[var(--accent-primary)] text-white px-6 py-3.5 md:py-3 rounded-xl md:rounded-2xl font-black flex items-center justify-center gap-2 hover:scale-[1.05] active:scale-[0.95] transition-all shadow-lg shadow-[var(--accent-primary)]/25"
+                    >
+                        <Plus size={20} />
+                        Add Stock
+                    </button>
+                </div>
 
             {/* KPI Summary */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">

@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard';
 import StockInsights from './pages/StockInsights';
 import Compare from './pages/Compare';
 import Portfolio from './pages/Portfolio';
+import Watchlist from './pages/Watchlist';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import VerifyEmail from './pages/VerifyEmail';
@@ -72,6 +73,7 @@ function App() {
                       <Route path="/stockinsights" element={<StockInsights theme={theme} selectedTicker={selectedTicker} />} />
                       <Route path="/compare" element={<Compare theme={theme} />} />
                       <Route path="/portfolio" element={<Portfolio theme={theme} />} />
+                      <Route path="/watchlist" element={<Watchlist theme={theme} />} />
                       <Route path="*" element={<Navigate to="/dashboard" replace />} />
                     </Routes>
                   </main>

@@ -13,6 +13,7 @@ class ComparisonPricePoint(BaseModel):
 
 class StockComparisonData(BaseModel):
     symbol: str
+    currency: Optional[str] = "USD"
     marketCap: Optional[float] = None
     trailingPE: Optional[float] = None
     dividendYield: Optional[float] = None

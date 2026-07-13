@@ -15,7 +15,8 @@ import {
     ShieldCheck,
     Wallet,
     Landmark,
-    ChevronDown
+    ChevronDown,
+    Eye
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -35,7 +36,8 @@ export default function Sidebar({ isOpen, setIsOpen, theme }) {
         { name: "Dashboard", icon: <LayoutDashboard size={20} />, path: "/dashboard" },
         { name: "Stock Insights", icon: <LineChart size={20} />, path: "/stockinsights" },
         { name: "Compare", icon: <TrendingUp size={20} />, path: "/compare" },
-        { name: "Portfolio", icon: <Briefcase size={20} />, path: "/portfolio" }
+        { name: "Portfolio", icon: <Briefcase size={20} />, path: "/portfolio" },
+        { name: "Watchlist", icon: <Eye size={20} />, path: "/watchlist" }
     ];
 
     return (

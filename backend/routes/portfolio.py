@@ -238,6 +238,50 @@ def delete_from_portfolio(item_id: str, request: Request):
         raise HTTPException(status_code=400, detail=str(e))
 
 
+@router.get("/export/csv")
+def export_portfolio_csv(request: Request):
+    """Download portfolio as a CSV file."""
+    import csv
+    import io
+    from fastapi.responses import StreamingResponse
+    from datetime import datetime
+
+    try:
+        # Reuse the get_portfolio logic
+        portfolio = get_portfolio(request)
+        assets = portfolio.get("assets", [])
+
+        output = io.StringIO()
+        writer = csv.writer(output)
+        writer.writerow([
+            "Symbol", "Native Currency", "Quantity",
+            "Buy Price", "Current Price",
+            "P&L (USD)", "P&L %", "Value (USD)", "Allocation %"
+        ])
+        for a in assets:
+            writer.writerow([
+                a.get("symbol", ""),
+                a.get("stockCurrency", "USD"),
+                a.get("quantity", 0),
+                a.get("buyPrice", 0),
+                a.get("currentPrice", 0),
+                a.get("pnlUSD", 0),
+                a.get("pnlPercent", 0),
+                a.get("valueUSD", 0),
+                a.get("allocation", 0),
+            ])
+
+        output.seek(0)
+        filename = f"portfolio_{datetime.now().strftime('%Y%m%d_%H%M')}.csv"
+        return StreamingResponse(
+            iter([output.getvalue()]),
+            media_type="text/csv",
+            headers={"Content-Disposition": f"attachment; filename={filename}"}
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @router.get("/history")
 def get_portfolio_history(request: Request):
     try:
