@@ -138,7 +138,7 @@ export default function ComparisonChart({ stocks, theme }) {
                             tick={{ fill: chartColors.text, fontSize: 10, fontWeight: 700 }}
                             axisLine={false}
                             tickLine={false}
-                            domain={chartMode === 'normalized' ? [85, 'auto'] : ['auto', 'auto']}
+                            domain={['auto', 'auto']}
                             tickFormatter={(val) => {
                                 if (chartMode === 'normalized') return `${val.toFixed(0)}`;
                                 return val > 1000 ? (val / 1000).toFixed(1) + 'k' : val.toFixed(0);

@@ -30,6 +30,31 @@ def _slice_last_six_months(df: pd.DataFrame) -> pd.DataFrame:
     return df[df.index >= cutoff]
 
 
+def _resolve_symbol(symbol: str):
+    """
+    Check if symbol returns data. If not and it doesn't contain a dot,
+    try appending '.NS' to automatically support Indian tickers.
+    Returns (ticker_object, period_1y_history, resolved_symbol_str).
+    """
+    symbol = symbol.upper().strip()
+    ticker = yf.Ticker(symbol)
+    try:
+        hist = ticker.history(period="1y")
+    except Exception:
+        hist = pd.DataFrame()
+        
+    if hist.empty and "." not in symbol:
+        try:
+            try_ticker = yf.Ticker(f"{symbol}.NS")
+            try_hist = try_ticker.history(period="1y")
+            if not try_hist.empty:
+                return try_ticker, try_hist, f"{symbol}.NS"
+        except Exception:
+            pass
+            
+    return ticker, hist, symbol
+
+
 def get_stock_currency(symbol: str) -> str:
     """
     Fetch and cache the native currency of a stock symbol.
@@ -63,21 +88,19 @@ def get_multi_stock_comparison(tickers: List[str]) -> List[dict]:
     rate_limited = False
     for symbol in tickers:
         symbol = symbol.upper()
-        cache_key = f"compare_{symbol}"
+        ticker, hist, resolved_symbol = _resolve_symbol(symbol)
+        
+        if hist.empty:
+            # Stock genuinely not found or no data
+            continue
+
+        cache_key = f"compare_{resolved_symbol}"
         cached = cache_get(cache_key)
         if cached:
             results.append(cached)
             continue
 
         try:
-            ticker = yf.Ticker(symbol)
-            
-            # 1. Fetch history (primary data source)
-            hist: pd.DataFrame = ticker.history(period="1y")
-
-            if hist.empty:
-                # Stock genuinely not found or no data
-                continue
 
             # 2. Fetch metadata (less reliable due to rate limits)
             try:
@@ -127,8 +150,8 @@ def get_multi_stock_comparison(tickers: List[str]) -> List[dict]:
             change_percent = ((current_price - prev_price) / prev_price) * 100 if prev_price and current_price else 0
 
             data = {
-                "symbol": symbol,
-                "currency": info.get("currency") or getattr(fast, "currency", "USD"),
+                "symbol": resolved_symbol,
+                "currency": (info.get("currency") or getattr(fast, "currency", "USD")).upper(),
                 "marketCap": safe_float(market_cap),
                 "trailingPE": safe_float(pe_ratio),
                 "dividendYield": safe_float(dividend_yield),
@@ -156,31 +179,29 @@ def get_multi_stock_comparison(tickers: List[str]) -> List[dict]:
 
 
 def get_stock_insights(ticker_symbol: str) -> dict:
-    cache_key = f"insights_{ticker_symbol.upper()}"
+    # Resolve symbol first so we cache under the resolved symbol name
+    ticker, hist, resolved_symbol = _resolve_symbol(ticker_symbol)
+    
+    cache_key = f"insights_{resolved_symbol}"
     cached = cache_get(cache_key)
     if cached:
         return cached
 
     try:
-        ticker = yf.Ticker(ticker_symbol)
-        
-        # 1. Fetch history (primary source)
-        hist: pd.DataFrame = ticker.history(period="1y")
-        
         # Fetch native currency details
         try:
             info = ticker.info
         except:
             info = {}
         fast = ticker.fast_info
-        currency = info.get("currency") or getattr(fast, "currency", "USD")
+        currency = (info.get("currency") or getattr(fast, "currency", "USD")).upper()
     except Exception as exc:
         if "Too Many Requests" in str(exc) or "Rate limited" in str(exc):
             raise ValueError("Yahoo Finance rate limit hit. Please try again later.")
-        raise ValueError(f"Failed to fetch data for {ticker_symbol}: {exc}")
+        raise ValueError(f"Failed to fetch data for {resolved_symbol}: {exc}")
 
     if hist.empty:
-        raise ValueError(f"Ticker symbol {ticker_symbol} not found or no historical data")
+        raise ValueError(f"Ticker symbol {resolved_symbol} not found or no historical data")
 
     # compute current price information
     try:
