@@ -19,3 +19,6 @@ sentence-transformers
 beautifulsoup4
 feedparser
 langchain-community
+langchain-google-genai
+transformers
+
