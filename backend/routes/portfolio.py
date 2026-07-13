@@ -9,53 +9,39 @@ from typing import List, Optional
 
 router = APIRouter()
 
-CURRENCY_CACHE_TTL = 3600      # 1 hour — currency rarely changes
-PORTFOLIO_PRICE_TTL = 180      # 3 minutes — prices are semi-live
+CURRENCY_CACHE_TTL = 3600      # 1 hour
+PORTFOLIO_PRICE_TTL = 180      # 3 minutes
 
 class StockAdd(BaseModel):
     symbol: str
     company_name: str
     quantity: float
     buy_price: float
-    buy_currency: Optional[str] = None   # native currency of buy price (e.g. "USD", "INR")
+    buy_currency: Optional[str] = None
 
 
 def _get_ticker_currency(symbol: str) -> str:
     """
     Return the native trading currency for a stock symbol.
-    Results are cached for 1 hour (via Redis or in-memory fallback).
+    Uses suffix-matching heuristic to avoid network requests.
     """
-    cache_key = f"currency_{symbol.upper()}"
+    symbol = symbol.upper()
+    if symbol.endswith(".NS") or symbol.endswith(".BO"):
+        return "INR"
+    
+    cache_key = f"currency_{symbol}"
     cached = cache_get(cache_key)
     if cached:
         return cached
+        
     try:
         fast = yf.Ticker(symbol).fast_info
         currency = getattr(fast, "currency", None) or "USD"
     except Exception:
         currency = "USD"
+        
     cache_set(cache_key, currency, ttl=CURRENCY_CACHE_TTL)
     return currency
-
-
-def _get_current_price(symbol: str) -> Optional[float]:
-    """
-    Fetch the latest closing price for a symbol.
-    Cached for 3 minutes so repeated portfolio loads don't hammer Yahoo.
-    """
-    cache_key = f"price_{symbol.upper()}"
-    cached = cache_get(cache_key)
-    if cached is not None:
-        return float(cached)
-    try:
-        hist = yf.Ticker(symbol).history(period="2d")
-        if hist.empty:
-            return None
-        price = float(hist["Close"].iloc[-1])
-        cache_set(cache_key, price, ttl=PORTFOLIO_PRICE_TTL)
-        return price
-    except Exception:
-        return None
 
 
 @router.get("/")
@@ -73,14 +59,41 @@ def get_portfolio(request: Request):
         port_data = result.data
     except Exception as e:
         print(f"Error fetching portfolio data: {e}")
-        return {"assets": [], "totalValueUSD": 0, "totalPnLUSD": 0, "totalPnLPercent": 0}
+        return {
+            "assets": [],
+            "totalValue": 0, "totalValueUSD": 0,
+            "totalPnL": 0, "totalPnLUSD": 0,
+            "totalPnLPercent": 0, "totalPnLPercentage": 0
+        }
     
     if not port_data:
-        return {"assets": [], "totalValueUSD": 0, "totalPnLUSD": 0, "totalPnLPercent": 0}
+        return {
+            "assets": [],
+            "totalValue": 0, "totalValueUSD": 0,
+            "totalPnL": 0, "totalPnLUSD": 0,
+            "totalPnLPercent": 0, "totalPnLPercentage": 0
+        }
+
+    # ── Batch fetch all current prices in a single request ─────────────────────
+    symbols = [stock["stock_symbol"] for stock in port_data]
+    try:
+        market_data_raw = yf.download(symbols, period="2d", progress=False)
+        if market_data_raw.empty:
+            market_data = pd.DataFrame()
+        elif isinstance(market_data_raw.columns, pd.MultiIndex):
+            market_data = market_data_raw.xs('Close', axis=1, level=0)
+        else:
+            if 'Close' in market_data_raw.columns:
+                market_data = market_data_raw[['Close']]
+                if len(symbols) == 1:
+                    market_data.columns = [symbols[0]]
+            else:
+                market_data = pd.DataFrame()
+    except Exception as e:
+        print(f"Batch fetch error in portfolio: {e}")
+        market_data = pd.DataFrame()
 
     # ── Fetch exchange rates for USD normalisation ─────────────────────────────
-    # We need to convert native prices → USD to produce consistent totals.
-    # The frontend will then convert USD totals → selected display currency.
     fx_cache_key = "exchange_rates_usd"
     exchange_rates = cache_get(fx_cache_key)
     if not exchange_rates:
@@ -96,7 +109,6 @@ def get_portfolio(request: Request):
         exchange_rates = {"INR": 83.5, "USD": 1.0, "EUR": 0.92, "GBP": 0.79}
 
     def to_usd(amount: float, currency: str) -> float:
-        """Convert an amount in native currency to USD."""
         rate = exchange_rates.get(currency, 1.0)
         if rate == 0:
             return amount
@@ -111,13 +123,14 @@ def get_portfolio(request: Request):
         qty = float(stock["quantity"])
         buy_price_native = float(stock["buy_price"])
 
-        # Determine native currency for this stock
         stock_currency = stock.get("buy_currency") or _get_ticker_currency(symbol)
 
-        # Fetch current price in native currency
-        current_price_native = _get_current_price(symbol)
-        if current_price_native is None:
-            current_price_native = buy_price_native  # fallback: no gain/loss
+        # Read latest close from the batch download dataframe
+        current_price_native = buy_price_native  # fallback
+        if not market_data.empty and symbol in market_data:
+            val = market_data[symbol].iloc[-1]
+            if not pd.isna(val):
+                current_price_native = float(val)
 
         # Convert to USD for portfolio-level totals
         buy_price_usd = to_usd(buy_price_native, stock_currency)
@@ -136,15 +149,22 @@ def get_portfolio(request: Request):
             "symbol": symbol,
             "stockCurrency": stock_currency,
             "quantity": qty,
-            # Native prices (for per-asset display with correct currency badge)
+            
+            # Native prices (for per-asset display)
             "buyPrice": round(buy_price_native, 4),
             "currentPrice": round(current_price_native, 4),
-            # USD-normalised values for consistent portfolio-level math
+            
+            # USD-normalised values (for consistent portfolio math)
             "buyPriceUSD": round(buy_price_usd, 4),
             "currentPriceUSD": round(current_price_usd, 4),
             "pnlUSD": round(pnl_usd, 2),
             "pnlPercent": round(pnl_percent, 2),
             "valueUSD": round(current_val_usd, 2),
+            
+            # Backward-compatible fields for Dashboard page
+            "value": round(current_val_usd, 2),
+            "pnl": round(pnl_usd, 2),
+            "pnlPercentage": round(pnl_percent, 2)
         })
 
     total_pnl_usd = current_total_usd - total_invested_usd
@@ -156,10 +176,13 @@ def get_portfolio(request: Request):
 
     return {
         "assets": sorted(assets, key=lambda x: x["valueUSD"], reverse=True),
-        # Totals in USD — frontend multiplies by getRate(selectedCurrency) to display
+        # Dual-key totals for perfect compatibility
+        "totalValue": round(float(current_total_usd), 2),
         "totalValueUSD": round(float(current_total_usd), 2),
+        "totalPnL": round(float(total_pnl_usd), 2),
         "totalPnLUSD": round(float(total_pnl_usd), 2),
         "totalPnLPercent": round(float(total_pnl_percent), 2),
+        "totalPnLPercentage": round(float(total_pnl_percent), 2)
     }
 
 
@@ -174,7 +197,6 @@ def add_to_portfolio(stock: StockAdd, request: Request):
         if token:
             supabase.postgrest.auth(token)
 
-        # Detect native currency of the stock if not provided
         stock_currency = stock.buy_currency or _get_ticker_currency(stock.symbol.upper())
         
         data = {
@@ -182,7 +204,7 @@ def add_to_portfolio(stock: StockAdd, request: Request):
             "stock_symbol": stock.symbol.upper(),
             "company_name": stock.company_name,
             "quantity": stock.quantity,
-            "buy_price": stock.buy_price,  # stored in native currency
+            "buy_price": stock.buy_price,
             "buy_currency": stock_currency,
         }
         
@@ -218,11 +240,6 @@ def delete_from_portfolio(item_id: str, request: Request):
 
 @router.get("/history")
 def get_portfolio_history(request: Request):
-    """
-    Returns aggregated historical time-series data for the user's portfolio.
-    All values are returned in USD for consistent cross-currency aggregation.
-    The frontend converts to the user's selected display currency.
-    """
     try:
         user_id = get_current_user(request)
         auth_header = request.headers.get("Authorization")
@@ -248,7 +265,6 @@ def get_portfolio_history(request: Request):
     if not port_data:
         return {"history": [], "signupDate": user_obj.created_at if user_obj else None, "currency": "USD"}
 
-    # Fetch exchange rates for USD normalisation
     fx_cache_key = "exchange_rates_usd"
     exchange_rates = cache_get(fx_cache_key)
     if not exchange_rates:
@@ -267,7 +283,7 @@ def get_portfolio_history(request: Request):
         rate = exchange_rates.get(currency, 1.0)
         return amount / rate if rate else amount
 
-    # Fetch per-stock currency
+    # Fetch currencies using cache-first method
     stock_currencies = {}
     for stock in port_data:
         sym = stock["stock_symbol"]
@@ -339,5 +355,5 @@ def get_portfolio_history(request: Request):
     return {
         "history": history_list,
         "signupDate": user_obj.created_at,
-        "currency": "USD",  # frontend converts to selected currency
+        "currency": "USD"
     }
