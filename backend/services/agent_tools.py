@@ -68,7 +68,7 @@ def predict_stock_trend(symbol: str) -> str:
         future_pred = model.predict(days=7)
         dates = pd.date_range(df.index[-1], periods=8, freq="B")[1:]
         
-        result = f"7-Day Forecast for {symbol} using AlphaEngine (Prophet+XGBoost):\n"
+        result = f"7-Day Trend Forecast for {symbol}:\n"
         for d, p in zip(dates, future_pred):
             result += f"- {d.strftime('%Y-%m-%d')}: ₹{p:,.2f}\n"
             
