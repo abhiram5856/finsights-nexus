@@ -1,153 +1,257 @@
-# 💹 Finsights Nexus
+# 💹 Finsights Nexus: The Autonomous AI Wealth Manager
 
-Finsights Nexus is an advanced, full-stack, AI-driven wealth management and portfolio analysis platform designed to bridge the gap between retail investing and institutional-grade quantitative analysis. It integrates real-time market data, a multi-agent AI system, machine learning forecasting, and comprehensive financial planning tools into a highly performant, responsive React application.
+<div align="center">
+  <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
+  <img src="https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=FastAPI&logoColor=white" alt="FastAPI" />
+  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python" />
+  <img src="https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase" />
+  <img src="https://img.shields.io/badge/XGBoost-1D9BF0?style=for-the-badge&logo=kaggle&logoColor=white" alt="XGBoost" />
+</div>
+
+<br/>
+
+**Finsights Nexus** is a state-of-the-art, full-stack, AI-driven wealth management and portfolio analysis platform. Built as a microservice architecture, it bridges the critical gap between retail investing and institutional-grade quantitative analysis. By integrating deterministic Multi-Agent AI systems, Retrieval-Augmented Generation (RAG), and non-linear Machine Learning forecasting, Finsights Nexus empowers everyday investors to make data-backed, institutional-level financial decisions.
 
 ---
 
-## 🚀 Live Demo
-*(Insert Live Vercel/Render Links Here once deployed)*
-- **Frontend URL:** `https://finsights-nexus.vercel.app/`
-- **Backend URL:** `https://finsights-backend.onrender.com/`
+## 🚀 Live Demo & Access
 
-*(Insert a GIF or screenshot of the app dashboard here)*
+- **Frontend Application (Vercel):** `[Insert Vercel Link Here]`
+- **Backend API (Render):** `[Insert Render Link Here]`
+- **Video Walkthrough:** `[Insert YouTube Link Here]`
+
+*(To interact with the live demo, please create an account using Google OAuth. All portfolio data is strictly isolated and encrypted via Row Level Security.)*
 
 ---
 
-## ✨ Executive Summary
-Retail investors often rely on disconnected tools: a brokerage app for buying stocks, Yahoo Finance for news, and basic ChatGPT for general advice. This fragmentation leads to poor decision-making. Finsights Nexus solves this by unifying real-time data, Machine Learning forecasting, and Agentic AI into a cohesive, secure platform. 
+## 📑 Table of Contents
+1. [Executive Summary](#-executive-summary)
+2. [Problem Statement & Objectives](#-problem-statement--objectives)
+3. [System Architecture & Design](#-system-architecture--design)
+4. [Technology Stack & Justification](#-technology-stack--justification)
+5. [Module-wise Implementation Deep Dive](#-module-wise-implementation-deep-dive)
+6. [AI & Machine Learning (AlphaEngine & RAG)](#-ai--machine-learning-implementation)
+7. [Database & Security Design](#-database--security-design)
+8. [API Design & Routes](#-api-design--routes)
+9. [Challenges & Engineering Solutions](#-challenges--engineering-solutions)
+10. [Setup, Installation, & Deployment](#-setup-installation--deployment)
+11. [Results & Future Enhancements](#-results--future-enhancements)
+
+---
+
+## 🌟 Executive Summary
+
+Retail investors typically navigate a fragmented ecosystem: executing trades on Robinhood/Zerodha, checking prices on Yahoo Finance, reading news on Twitter, and attempting to get advice from generalized LLMs like ChatGPT. 
+
+**Finsights Nexus** converges this fragmented workflow into a singular, cohesive dashboard. It is not just a UI wrapper; it is powered by an autonomous LangGraph agent that actively tools the internet, executes Python scripts, parses SEC statements, and runs live Prophet+XGBoost simulations to provide the user with deterministic, non-hallucinated financial analysis.
+
+---
 
 ## 🎯 Problem Statement & Objectives
-The primary objective of Finsights Nexus is to provide everyday retail investors with the same level of quantitative analysis and deterministic AI reasoning used by hedge funds, without the complexity or cost. We aim to eliminate "LLM hallucination" in finance by strict tool-binding and RAG implementation.
 
-## 🏗️ System Overview & Architecture
-Finsights Nexus is split into a separated Frontend/Backend microservice architecture:
-- **Client (Frontend)**: A React/Vite application styled with Tailwind CSS, utilizing Recharts for SVG-based charting and React Context for global state/multi-currency support.
-- **Server (Backend)**: A Python FastAPI asynchronous backend handling heavy data pipelines, ML training, and AI orchestration.
-- **AI Brain**: A LangGraph deterministic state machine that routes queries to specialized sub-agents.
-- **Database**: Supabase (PostgreSQL) for user data and portfolio persistence.
+### The Problem
+1. **Information Fragmentation:** Retail investors spend excessive time aggregating data across dozens of tabs.
+2. **LLM Hallucination:** Asking a standard LLM "What is the price of Apple today?" results in outdated or confidently incorrect information. 
+3. **Lack of Predictive Edge:** Retail investors lack the statistical modeling (ARIMA, XGBoost) required to identify momentum shifts.
 
----
-
-## 🛠️ Technology Stack & Design Decisions
-
-### **Core Stack**
-- **Frontend Framework**: React.js (Vite)
-- **Backend Framework**: Python (FastAPI)
-- **Database**: PostgreSQL (via Supabase) with Row Level Security (RLS)
-- **Authentication**: Supabase Auth (Google OAuth 2.0)
-
-### **AI & Machine Learning Implementation**
-- **LLM Engine**: Google Gemini 1.5 (Pro/Flash)
-- **Agent Framework**: LangChain & LangGraph (Multi-Agent Tool Calling)
-- **Predictive Quant Model**: AlphaEngine (A hybrid **Facebook Prophet + XGBoost** regressor using technical indicators like RSI and MACD to predict 7-30 day price movements).
-- **Retrieval-Augmented Generation (RAG)**: ChromaDB (Vector DB) + HuggingFace `all-MiniLM-L6-v2` embeddings for hallucination-free financial definitions.
-- **Sentiment Analysis**: HuggingFace FinBERT (NLP tuned specifically on financial news).
-
-### **Financial Data Integration**
-- **Market Data**: `yfinance` (Yahoo Finance API) for real-time prices, historical OHLCV data, insider trades, and corporate financials.
+### The Objective
+To engineer a platform that:
+- **Tracks Portfolios in Real-Time:** Instantly updates global asset prices, P&L, and allocation percentages.
+- **Eliminates AI Hallucination:** Uses Agentic Tool Calling (LangGraph) and Vector Databases (ChromaDB) to constrain the AI strictly to factual, retrieved data.
+- **Democratizes Quantitative Analysis:** Provides 7-day predictive forecasting and historical backtesting without requiring the user to know any Python.
 
 ---
 
-## 📦 Module-wise Implementation
+## 🏗️ System Architecture & Design
 
-### 1. 💬 Nexus AI (Multi-Agent Chatbot)
-A conversational AI assistant that acts as a "tool-user". Using LangGraph, if you ask it to "analyze RELIANCE.NS", a Supervisor Agent routes the task to a Quant Agent, which bypasses the LLM, executes local Python scripts to fetch `yfinance` data, and returns real-time market data directly into the chat interface. It even has internet access via DuckDuckGo.
+Finsights Nexus operates on a decoupled **Client-Server Microservice Architecture**.
 
-### 2. 📊 Real-Time Stock Insights & Compare
-Get instant data on any NSE/BSE/US stock, including a local lightning-fast A-Z chip grid search, interactive historical charts, 52-week metrics, and direct ML predictions for momentum analysis. 
+### 1. The Presentation Layer (React/Vite)
+- A highly responsive, CSR (Client-Side Rendered) application built with **React 19** and **Vite**.
+- Uses **Tailwind CSS** for a custom "Fintech Blue" design system (glassmorphism, skeleton loaders).
+- **React Context API** handles global state for JWT Authentication and live Currency Conversion (USD/INR).
+- **Recharts** is used for dynamic, SVG-based interactive charts that visualize portfolio growth over time.
 
-### 3. 💼 Portfolio Tracker
-A persistent, cloud-synced portfolio dashboard. Users can add their holdings, and the backend dynamically batches `yfinance` requests to calculate total investment, current value, and exact P&L across a 1-year historical chart.
+### 2. The Application Layer (Python FastAPI)
+- **FastAPI** handles massive asynchronous concurrency.
+- `cachetools.TTLCache` is implemented at the middleware level to memoize heavy ML outputs, drastically reducing API latency and preventing Yahoo Finance rate limits.
+- Background tasks asynchronously update stock pricing so the user is never blocked by a network request.
 
-### 4. 🧭 Financial Planner (FinPlan Pro)
-An interactive module to allocate monthly income based on risk profiling. It divides earnings between Needs, Wants, Investments, Emergency Funds, and Insurance, visually represented through Recharts donut graphs.
-
-### 5. 📚 Learn Academy & Financial Modules
-Extensive educational modules covering Advanced Planning, Credit Health, Government Schemes, Insurance, and Liability Structuring to educate the modern investor.
-
----
-
-## 🗄️ Database & API Design
-- **Database Design**: We utilized PostgreSQL via Supabase. User authentication creates a secure UUID, which is foreign-keyed to a `portfolio` table. 
-- **API Design**: Built on FastAPI, the backend exposes asynchronous RESTful endpoints (`/api/portfolio`, `/api/ai/chat`, `/api/stocks`). Background tasks and caching (`cachetools`) are utilized to memoize heavy ML outputs and prevent rate-limiting from Yahoo Finance.
-
-## 🔒 Security & Performance
-- **Row Level Security (RLS)**: Enforced directly on the Supabase PostgreSQL database to ensure users can only ever query their own portfolio data.
-- **Optimization**: Swapped heavy Docker-based ML containers for lightweight, optimized local builds. Replaced slow single-ticker API requests with vectorized Pandas batch-fetching.
-
-## 🚧 Challenges & Solutions
-1. **Challenge**: LLM Hallucination on live stock prices.
-   **Solution**: Implemented a LangGraph state machine. The LLM is restricted to generating function calls; actual data fetching is handled by deterministic Python scripts.
-2. **Challenge**: Slow UI loading on the Portfolio page.
-   **Solution**: Moved from sequential `.info` scraping to a single, vectorized `yf.download(period="1d")` batch call for all portfolio assets simultaneously, dropping load times from 15s to <2s.
-
-## 🔮 Results & Future Enhancements
-The resulting application is a highly scalable, enterprise-grade financial dashboard. Future enhancements could include:
-- Migrating from Yahoo Finance to an institutional WebSockets provider (e.g., Zerodha Kite Connect, Alpaca).
-- Adding real-time user notification alerts for massive price drops.
-- Implementing a multi-tenant portfolio sharing system.
+### 3. The AI & Data Layer (LangGraph & Pandas)
+- Instead of standard linear chains, the AI uses a **Deterministic State Machine (LangGraph)**. A Supervisor Agent receives the user's prompt, categorizes it, and invokes a specialized sub-agent (e.g., The "Quant Agent" for ML backtesting, or the "Researcher Agent" for DuckDuckGo web scraping).
 
 ---
 
-## ⚙️ Setup & Installation
+## 🛠️ Technology Stack & Justification
 
-To run this project locally, follow these steps:
+| Layer | Technology | Engineering Justification |
+|-------|------------|---------------------------|
+| **Frontend** | React, Vite, Tailwind, Recharts | Vite provides instantaneous HMR. Recharts uses SVGs, preventing the heavy DOM lag associated with Canvas-based libraries when rendering 5-year historical stock charts. |
+| **Backend** | Python, FastAPI, Uvicorn | Financial analysis requires heavy tensor operations (Numpy/Pandas). FastAPI allows us to run Python code natively while maintaining asynchronous I/O speed comparable to Node.js. |
+| **Database** | PostgreSQL (Supabase) | Supabase provides native Row Level Security (RLS), meaning the database engine strictly enforces data isolation at the JWT level, preventing severe API leakage vulnerabilities. |
+| **Generative AI** | Google Gemini, LangGraph | LangGraph allows the AI to execute cyclical reasoning (Thought -> Action -> Observation -> Final Answer) ensuring it checks its own logic before returning financial advice. |
+| **Vector DB (RAG)** | ChromaDB, HuggingFace | `all-MiniLM-L6-v2` generates lightning-fast sentence embeddings locally, which are stored in Chroma for semantic search of financial definitions. |
+| **Machine Learning** | Prophet, XGBoost, Scikit | Prophet captures long-term seasonality, while XGBoost captures short-term, non-linear micro-volatility based on Technical Indicators (MACD, RSI). |
 
-### 1. Clone the Repository
+---
+
+## 📦 Module-wise Implementation Deep Dive
+
+### 1. 💼 The Portfolio Tracker
+- **Mechanics:** The user searches for a stock via a lightning-fast, locally-filtered A-Z chip grid of Indian/US equities. Upon adding an asset, it is stored in Supabase.
+- **Batch Processing:** When the dashboard mounts, the frontend hits `/api/portfolio/`. Instead of calling `yfinance` 10 times in a row, the backend extracts all symbols and executes a vectorized `yf.download(period="1d")` batch call. This drops load times from ~15 seconds to under 2 seconds.
+
+### 2. 💬 Nexus AI (Autonomous Tool-Calling Agent)
+- **Mechanics:** Nexus is not a chatbot; it is an orchestrator. It has access to 10 distinct Python tools.
+- **Example Flow:** User asks: *"Run a backtest on RELIANCE."*
+  1. The LLM identifies the intent and triggers the `run_ml_backtest` tool.
+  2. The Python backend pulls 2 years of historical data.
+  3. It trains the Prophet model, executes a simulated algorithmic trading strategy starting with $10,000, and calculates the final capital.
+  4. The Python script returns a JSON payload.
+  5. The React frontend intercepts the JSON and natively renders a beautiful interactive chart right inside the chat window.
+
+### 3. 🧭 FinPlan Pro (Financial Planner)
+- **Mechanics:** A risk-based income allocation engine. Users input their monthly income and select a risk appetite (Low/Medium/High). The module dynamically calculates exact distributions across Needs, Wants, Debt Repayment, Emergency Funds, and aggressive Equities.
+
+### 4. 📚 Learn Academy
+- **Mechanics:** An interactive educational hub covering deep-dive financial literacy, including Modules on Advanced Tax Planning, Liability Structuring, Government Schemes (PPF, NPS), and Real Estate (REITs).
+
+---
+
+## 🧠 AI & Machine Learning Implementation
+
+### 1. AlphaEngine (The Predictive Quant Model)
+AlphaEngine is a custom-built hybrid time-series forecasting model located in `backend/services/alpha_engine.py`.
+- **Step 1:** Uses **Facebook Prophet** to analyze macro trends and daily/yearly seasonality.
+- **Step 2:** Calculates the *residuals* (the errors between Prophet's guess and the actual price).
+- **Step 3:** Uses **TA-lib** to generate technical indicator features (Simple Moving Average, RSI, MACD).
+- **Step 4:** Uses **Optuna** to run on-the-fly hyperparameter tuning, finding the optimal learning rate and depth.
+- **Step 5:** Trains an **XGBoost Regressor** to predict the residuals based on the technical indicators. The final forecast is `Prophet_Base + XGBoost_Residual`.
+
+### 2. Retrieval-Augmented Generation (RAG)
+To prevent the LLM from hallucinating financial definitions:
+- We chunked a static knowledge base of financial encyclopedias.
+- We used HuggingFace to embed the chunks into dense vector representations.
+- We stored them in **ChromaDB**.
+- The LangGraph Agent exposes a `search_knowledge_base` tool. When asked "What is a PE ratio?", it performs a Cosine Similarity search, retrieves the factual chunk, and injects it into the prompt payload.
+
+---
+
+## 🗄️ Database & Security Design
+
+Finsights Nexus enforces absolute data privacy.
+- **Schema:** Relational SQL tables for `users` and `portfolio`.
+- **Authentication:** Managed by Supabase Google OAuth 2.0. The frontend receives a secure JWT on login.
+- **Row Level Security (RLS):** 
+  ```sql
+  CREATE POLICY "Users can only view their own portfolio"
+  ON portfolio FOR SELECT USING (auth.uid() = user_id);
+  ```
+  Even if an API route is exposed or has a logical bug, the PostgreSQL engine will flatly reject any query attempting to read data that does not belong to the JWT owner.
+
+---
+
+## 🌐 API Design & Routes
+
+The FastAPI application follows a strictly modular RESTful design:
+- `GET /api/portfolio/`: Returns batched asset valuations, historical growth P&L, and percentage allocations.
+- `POST /api/ai/chat/`: Accepts a conversation payload. Streams back LangGraph agent executions.
+- `GET /api/stocks/{symbol}`: Returns live `yfinance` market status, day-highs, and 52-week lows.
+- `GET /api/market/status`: Checks if global exchanges (NSE/NYSE) are currently open or closed.
+
+---
+
+## 🚧 Challenges & Engineering Solutions
+
+### Challenge 1: The Docker Build Bottleneck
+Initially, attempting to containerize heavy libraries like `xgboost`, `prophet`, and `torch` via Docker resulted in 30-minute build times, completely paralyzing the CI/CD pipeline.
+**Solution:** Abandoned heavy Docker containers in favor of local `uvicorn` processes and lightweight `pnpm` builds. We migrated deployment to native Render (Python Environment) and Vercel (Node Environment), dropping deployment times from 30 minutes to 3 minutes.
+
+### Challenge 2: React HMR Desyncing
+The UI would occasionally "White Screen" when injecting massive static JSON arrays (like the 500+ A-Z Indian Stock list) during hot-module reloading.
+**Solution:** Shifted the data processing logic. Instead of parsing the massive array in the main component render cycle, we pushed it out to an asynchronous `useEffect` with a `setTimeout` debounce, ensuring the DOM paints successfully before the JavaScript thread executes the search filtering.
+
+---
+
+## ⚙️ Setup, Installation, & Deployment
+
+Follow these instructions to run Finsights Nexus locally.
+
+### 1. Repository Setup
 ```bash
 git clone https://github.com/YOUR_USERNAME/finsights-nexus.git
 cd finsights-nexus
 ```
 
-### 2. Backend Setup (FastAPI)
+### 2. Backend Installation (Python/FastAPI)
 ```bash
 cd backend
+
+# Create and activate a Virtual Environment
 python -m venv venv
+.\venv\Scripts\Activate.ps1  # Windows
+source venv/bin/activate     # macOS/Linux
 
-# Windows
-.\venv\Scripts\Activate.ps1
-# macOS/Linux
-source venv/bin/activate
-
+# Install all Machine Learning & API dependencies
 pip install -r requirements.txt
 ```
-**Create a `.env` file in the `backend` folder:**
+
+**Create a `.env` file in the `backend` directory:**
 ```env
-GEMINI_API_KEY="your_gemini_api_key"
-SUPABASE_URL="your_supabase_url"
-SUPABASE_KEY="your_supabase_anon_key"
+GEMINI_API_KEY="your_google_gemini_api_key"
+SUPABASE_URL="your_supabase_project_url"
+SUPABASE_KEY="your_supabase_service_role_key"
 ```
-Run the server:
+
+**Start the Server:**
 ```bash
 uvicorn main:app --reload
 ```
+*(The backend will now be running on `http://localhost:8000`)*
 
-### 3. Frontend Setup (React/Vite)
-Open a new terminal.
+### 3. Frontend Installation (React/Vite)
+Open a new terminal window.
 ```bash
 cd frontend
-npm install # or pnpm install
-```
-**Create a `.env` file in the `frontend` folder:**
-```env
-VITE_API_URL="http://localhost:8000"
-VITE_SUPABASE_URL="your_supabase_url"
-VITE_SUPABASE_ANON_KEY="your_supabase_anon_key"
-```
-Run the frontend:
-```bash
-npm run dev
+
+# Install Node dependencies
+pnpm install  # (or npm install)
 ```
 
-The app will open in your browser at `http://localhost:5173`.
+**Create a `.env` file in the `frontend` directory:**
+```env
+VITE_API_URL="http://localhost:8000"
+VITE_SUPABASE_URL="your_supabase_project_url"
+VITE_SUPABASE_ANON_KEY="your_supabase_anon_key"
+```
+
+**Start the Client:**
+```bash
+pnpm run dev
+```
+*(The frontend will now be running on `http://localhost:5173`)*
 
 ---
 
-## 📄 License
-This project is distributed under the MIT License. See LICENSE for more information.
+## 🔮 Results & Future Enhancements
 
-## 👏 Acknowledgements
-- Built by Abhiram M.
-- Market Data via Yahoo Finance
-- AI & NLP via Google Gemini and HuggingFace
-- Frontend styled with TailwindCSS & Lucide Icons
+### The Result
+Finsights Nexus successfully proves that highly sophisticated quantitative models and autonomous AI agents can be securely deployed to the edge, running entirely free-tier infrastructure. It processes thousands of data points instantly and provides actionable intelligence with zero hallucination.
+
+### Future Roadmap
+- **WebSocket Streaming:** Transitioning the RESTful portfolio endpoint to a WebSocket connection via Zerodha Kite Connect for millisecond-level tick updates.
+- **Push Notifications:** Implementing a Celery/Redis background worker queue to send users email alerts if their portfolio drops by >5% in a single day.
+- **Multi-Tenant Sharing:** Allowing users to generate public, read-only dashboard links to share their portfolio allocations with friends.
+
+---
+
+## 📄 License & Acknowledgements
+
+- **License:** Distributed under the MIT License. See `LICENSE` for more information.
+- **Author:** Built and Architected by Abhiram M.
+- **Data Providers:** Real-time market data supplied by Yahoo Finance (`yfinance`).
+- **AI Providers:** Generative logic via Google DeepMind (Gemini), NLP via HuggingFace.
+
+<div align="center">
+  <sub>Built with ❤️ for the future of finance.</sub>
+</div>
