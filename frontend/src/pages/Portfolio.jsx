@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import StockAutocomplete from '../components/StockAutocomplete';
 import { supabase } from '../lib/supabase';
 import { PieChart as PieChartIcon, Search, Plus, List, ArrowUpRight, TrendingUp, TrendingDown, RefreshCw, Briefcase, Trash2, X, AlertTriangle, Zap, CheckCircle2, Loader2, Globe, Download } from 'lucide-react';
@@ -37,6 +37,14 @@ export default function Portfolio({ theme }) {
     const [isAiLoading, setIsAiLoading] = useState(false);
     const [error, setError] = useState(null);
 
+    // ── Live refresh state ────────────────────────────────────────────────────
+    const REFRESH_INTERVAL = 60; // seconds
+    const [countdown, setCountdown] = useState(REFRESH_INTERVAL);
+    const [lastUpdated, setLastUpdated] = useState(null);
+    const [isRefreshing, setIsRefreshing] = useState(false);
+    const countdownRef = useRef(null);
+    const refreshRef = useRef(null);
+
     // Detected native currency for the stock being added
     const [detectedCurrency, setDetectedCurrency] = useState(null);
 
@@ -65,20 +73,52 @@ export default function Portfolio({ theme }) {
 
     // ── Data fetching ──────────────────────────────────────────────────────────
 
-    const fetchPortfolio = async () => {
-        setIsLoading(true);
+    const fetchPortfolio = useCallback(async (silent = false) => {
+        if (!silent) setIsLoading(true);
+        else setIsRefreshing(true);
         try {
             const res = await api.get('/portfolio/');
             setPortfolio(res.data);
+            setLastUpdated(new Date());
         } catch (err) {
             console.error("Fetch portfolio error:", err);
-            setPortfolio({ assets: [], totalValueUSD: 0, totalPnLUSD: 0, totalPnLPercent: 0 });
+            if (!silent) setPortfolio({ assets: [], totalValueUSD: 0, totalPnLUSD: 0, totalPnLPercent: 0 });
         } finally {
-            setIsLoading(false);
+            if (!silent) setIsLoading(false);
+            else setIsRefreshing(false);
         }
-    };
+    }, []);
 
-    useEffect(() => { fetchPortfolio(); }, []);
+    // Initial load
+    useEffect(() => { fetchPortfolio(false); }, [fetchPortfolio]);
+
+    // ── Auto-refresh every 60 seconds ──────────────────────────────────────────
+    useEffect(() => {
+        // Countdown ticker
+        countdownRef.current = setInterval(() => {
+            setCountdown(prev => {
+                if (prev <= 1) return REFRESH_INTERVAL;
+                return prev - 1;
+            });
+        }, 1000);
+
+        // Silent price refresh
+        refreshRef.current = setInterval(() => {
+            fetchPortfolio(true);
+            setCountdown(REFRESH_INTERVAL);
+        }, REFRESH_INTERVAL * 1000);
+
+        return () => {
+            clearInterval(countdownRef.current);
+            clearInterval(refreshRef.current);
+        };
+    }, [fetchPortfolio]);
+
+    // Manual refresh
+    const handleManualRefresh = () => {
+        fetchPortfolio(true);
+        setCountdown(REFRESH_INTERVAL);
+    };
 
     // Detect native currency when user selects a stock in the Add modal
     const handleStockSelect = async (symbol, stock) => {
@@ -221,12 +261,40 @@ export default function Portfolio({ theme }) {
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 px-4 md:px-0">
                 <div className="space-y-1 md:space-y-2">
                     <h1 className="text-3xl md:text-4xl font-black text-[var(--text-main)] tracking-tight">Portfolio</h1>
-                    <p className="text-[11px] md:text-[13px] text-[var(--text-muted)] font-medium flex items-center gap-2">
-                        <Briefcase size={16} className="text-[var(--accent-primary)]" />
-                        Track and optimize your global investment distribution
-                    </p>
+                    <div className="flex items-center gap-3 flex-wrap">
+                        <p className="text-[11px] md:text-[13px] text-[var(--text-muted)] font-medium flex items-center gap-2">
+                            <Briefcase size={16} className="text-[var(--accent-primary)]" />
+                            Track and optimize your global investment distribution
+                        </p>
+                        {/* Live refresh indicator */}
+                        <div className="flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
+                            <span className={`w-2 h-2 rounded-full flex-shrink-0 ${isRefreshing ? 'bg-amber-400 animate-pulse' : 'bg-emerald-500 animate-pulse'}`} />
+                            <span className="text-[10px] font-black text-emerald-500">
+                                {isRefreshing ? 'Refreshing...' : 'Live Prices'}
+                            </span>
+                            {!isRefreshing && (
+                                <span className="text-[10px] text-[var(--text-muted)] font-medium">
+                                    · {countdown}s
+                                </span>
+                            )}
+                        </div>
+                        {lastUpdated && (
+                            <span className="text-[10px] text-[var(--text-muted)] font-medium hidden sm:inline">
+                                Updated {lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                            </span>
+                        )}
+                    </div>
                 </div>
                 <div className="flex gap-2 w-full sm:w-auto">
+                    {/* Manual refresh */}
+                    <button
+                        onClick={handleManualRefresh}
+                        disabled={isRefreshing}
+                        title="Refresh prices now"
+                        className="p-3 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl text-[var(--text-muted)] hover:text-[var(--accent-primary)] hover:border-[var(--accent-primary)] transition-all"
+                    >
+                        <RefreshCw size={18} className={isRefreshing ? 'animate-spin text-amber-400' : ''} />
+                    </button>
                     <button
                         onClick={async () => {
                             try {
@@ -319,7 +387,7 @@ export default function Portfolio({ theme }) {
                             </thead>
                             <tbody className="divide-y divide-[var(--border-color)]">
                                 {portfolio?.assets.map((asset) => (
-                                    <tr key={asset.id} className="group hover:bg-[var(--bg-primary)]/40 transition-colors">
+                                    <tr key={asset.id} className={`group hover:bg-[var(--bg-primary)]/40 transition-colors ${isRefreshing ? 'opacity-80' : ''}`}>
                                         <td className="py-4 md:py-6 px-4 md:px-8">
                                             <div className="flex items-center gap-2 md:gap-3">
                                                 <div className="w-8 h-8 md:w-10 md:h-10 bg-[var(--bg-primary)] rounded-lg md:rounded-xl flex items-center justify-center font-black text-[var(--accent-primary)] border border-[var(--border-color)] text-xs md:text-base">
@@ -341,8 +409,10 @@ export default function Portfolio({ theme }) {
                                             {/* buyPrice is in native currency (e.g. USD for TSLA) → convert to selectedCurrency */}
                                             {formatAssetPrice(asset.buyPrice, asset.stockCurrency)}
                                         </td>
-                                        <td className="py-4 md:py-6 px-2 md:px-4 text-right font-black text-[13px] md:text-base text-[var(--text-main)]">
-                                            {formatAssetPrice(asset.currentPrice, asset.stockCurrency)}
+                                        <td className="py-4 md:py-6 px-2 md:px-4 text-right">
+                                            <span className={`font-black text-[13px] md:text-base transition-all duration-500 ${isRefreshing ? 'text-[var(--text-muted)]' : 'text-[var(--text-main)]'}`}>
+                                                {formatAssetPrice(asset.currentPrice, asset.stockCurrency)}
+                                            </span>
                                         </td>
                                         <td className="py-4 md:py-6 px-2 md:px-4 text-right font-black">
                                             <div className={`flex flex-col items-end ${asset.pnlUSD >= 0 ? 'text-emerald-500' : 'text-rose-500'}`}>
