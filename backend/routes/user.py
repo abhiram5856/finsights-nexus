@@ -219,7 +219,7 @@ def _send_alert_email(to_email: str, symbol: str, condition: str, target: float,
             "https://api.resend.com/emails",
             headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
             json={
-                "from": "Nexus Alerts <alerts@yourdomain.com>",
+                "from": "Nexus Alerts <onboarding@resend.dev>",
                 "to": [to_email],
                 "subject": subject,
                 "html": body,
