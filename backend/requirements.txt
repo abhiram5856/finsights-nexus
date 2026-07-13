@@ -23,8 +23,9 @@ langchain-google-genai
 transformers
 optuna
 langgraph
+langgraph-checkpoint-sqlite
 duckduckgo-search
 langchain-experimental
 cachetools
-
-
+python-multipart
+pytz
