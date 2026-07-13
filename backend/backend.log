@@ -1,0 +1,1957 @@
+INFO:     Will watch for changes in these directories: ['/Users/valurothusharan/Desktop/finsights/backend']
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [9398] using StatReload
+INFO:     Started server process [9453]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:57392 - "GET /api/portfolio/ HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 410, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/applications.py", line 107, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/cors.py", line 85, in __call__
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 115, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 101, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 355, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 245, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2502, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 986, in run
+    result = context.run(func, *args)
+  File "/Users/valurothusharan/Desktop/finsights/backend/routes/portfolio.py", line 23, in get_portfolio
+    result = supabase.table("portfolio").select("*").eq("user_id", user_id).execute()
+  File "/opt/anaconda3/lib/python3.13/site-packages/postgrest/_sync/request_builder.py", line 53, in execute
+    raise APIError(dict(json_obj))
+postgrest.exceptions.APIError: {'message': 'invalid input syntax for type uuid: "1"', 'code': '22P02', 'hint': None, 'details': None}
+WARNING:  StatReload detected changes in 'services/auth.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [9453]
+INFO:     Started server process [10213]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:57421 - "GET /api/expenses/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57421 - "GET /api/expenses/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57421 - "GET /api/expenses/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57421 - "GET /api/expenses/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57428 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57437 - "GET /api/portfolio/USER_ID HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:57437 - "GET /api/portfolio/USER_ID HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:57437 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57437 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57490 - "GET /api/portfolio/USER_ID HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:57490 - "GET /api/portfolio/USER_ID HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:57492 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57492 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58011 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58011 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58009 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58009 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58033 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58033 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58261 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58261 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58259 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58259 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58526 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58526 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58547 - "OPTIONS /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58547 - "POST /api/portfolio/ HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 410, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/applications.py", line 107, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 115, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 101, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 355, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 245, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2502, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 986, in run
+    result = context.run(func, *args)
+  File "/Users/valurothusharan/Desktop/finsights/backend/routes/portfolio.py", line 109, in add_to_portfolio
+    result = supabase.table("portfolio").insert(data).execute()
+  File "/opt/anaconda3/lib/python3.13/site-packages/postgrest/_sync/request_builder.py", line 53, in execute
+    raise APIError(dict(json_obj))
+postgrest.exceptions.APIError: {'message': 'new row violates row-level security policy for table "portfolio"', 'code': '42501', 'hint': None, 'details': None}
+INFO:     127.0.0.1:58548 - "POST /api/portfolio/ HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 410, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/applications.py", line 107, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 115, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 101, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 355, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 245, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2502, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 986, in run
+    result = context.run(func, *args)
+  File "/Users/valurothusharan/Desktop/finsights/backend/routes/portfolio.py", line 109, in add_to_portfolio
+    result = supabase.table("portfolio").insert(data).execute()
+  File "/opt/anaconda3/lib/python3.13/site-packages/postgrest/_sync/request_builder.py", line 53, in execute
+    raise APIError(dict(json_obj))
+postgrest.exceptions.APIError: {'message': 'new row violates row-level security policy for table "portfolio"', 'code': '42501', 'hint': None, 'details': None}
+INFO:     127.0.0.1:58556 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58556 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58583 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58583 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58588 - "GET /api/search?q=MS HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58591 - "GET /api/search?q=MSFT HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58591 - "GET /api/search/?q=MSFT HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58591 - "GET /api/search?q=MSFT.L HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58591 - "GET /api/search/?q=MSFT.L HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58597 - "GET /api/search?q=a HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58601 - "GET /api/search?q=am HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58601 - "GET /api/search/?q=am HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58601 - "GET /api/search?q=AMZN HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58601 - "GET /api/search/?q=AMZN HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58601 - "GET /api/search?q=AMZN.MX HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58601 - "GET /api/search/?q=AMZN.MX HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58601 - "GET /api/search?q=AMZN.M HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58607 - "GET /api/search?q=AM HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58607 - "GET /api/search/?q=AM HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58607 - "GET /api/search?q=AMa HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58611 - "GET /api/search?q=AMaz HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58611 - "GET /api/search/?q=AMaz HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58611 - "GET /api/search?q=AMazon HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58611 - "GET /api/search/?q=AMazon HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58611 - "GET /api/search?q=AMZN HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58611 - "GET /api/search/?q=AMZN HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58616 - "POST /api/portfolio/ HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 410, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/applications.py", line 107, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 115, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 101, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 355, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 245, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2502, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 986, in run
+    result = context.run(func, *args)
+  File "/Users/valurothusharan/Desktop/finsights/backend/routes/portfolio.py", line 109, in add_to_portfolio
+    result = supabase.table("portfolio").insert(data).execute()
+  File "/opt/anaconda3/lib/python3.13/site-packages/postgrest/_sync/request_builder.py", line 53, in execute
+    raise APIError(dict(json_obj))
+postgrest.exceptions.APIError: {'message': 'new row violates row-level security policy for table "portfolio"', 'code': '42501', 'hint': None, 'details': None}
+INFO:     127.0.0.1:58625 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58625 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58627 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58627 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58627 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58627 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58633 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58633 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58633 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58633 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58650 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58650 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58653 - "GET /api/search?q=AAPL HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58653 - "GET /api/search/?q=AAPL HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58653 - "GET /api/search?q=AAPL.MX HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58653 - "GET /api/search/?q=AAPL.MX HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58658 - "POST /api/portfolio/ HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 410, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/applications.py", line 107, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 115, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 101, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 355, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 245, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2502, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 986, in run
+    result = context.run(func, *args)
+  File "/Users/valurothusharan/Desktop/finsights/backend/routes/portfolio.py", line 109, in add_to_portfolio
+    result = supabase.table("portfolio").insert(data).execute()
+  File "/opt/anaconda3/lib/python3.13/site-packages/postgrest/_sync/request_builder.py", line 53, in execute
+    raise APIError(dict(json_obj))
+postgrest.exceptions.APIError: {'message': 'new row violates row-level security policy for table "portfolio"', 'code': '42501', 'hint': None, 'details': None}
+INFO:     127.0.0.1:58684 - "GET /api/search?q=APPLE%20INC HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58684 - "GET /api/search/?q=APPLE%20INC HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58684 - "GET /api/search?q=AAPL HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58684 - "GET /api/search/?q=AAPL HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58684 - "GET /api/search?q=APPLE%20INC HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58684 - "GET /api/search/?q=APPLE%20INC HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58688 - "POST /api/portfolio/ HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 410, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/applications.py", line 107, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 115, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 101, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 355, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 245, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2502, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 986, in run
+    result = context.run(func, *args)
+  File "/Users/valurothusharan/Desktop/finsights/backend/routes/portfolio.py", line 109, in add_to_portfolio
+    result = supabase.table("portfolio").insert(data).execute()
+  File "/opt/anaconda3/lib/python3.13/site-packages/postgrest/_sync/request_builder.py", line 53, in execute
+    raise APIError(dict(json_obj))
+postgrest.exceptions.APIError: {'message': 'new row violates row-level security policy for table "portfolio"', 'code': '42501', 'hint': None, 'details': None}
+INFO:     127.0.0.1:58691 - "GET /api/search?q=Apple%20Inc HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58691 - "GET /api/search/?q=Apple%20Inc HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58693 - "POST /api/portfolio/ HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 410, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/applications.py", line 107, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 115, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 101, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 355, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 245, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2502, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 986, in run
+    result = context.run(func, *args)
+  File "/Users/valurothusharan/Desktop/finsights/backend/routes/portfolio.py", line 109, in add_to_portfolio
+    result = supabase.table("portfolio").insert(data).execute()
+  File "/opt/anaconda3/lib/python3.13/site-packages/postgrest/_sync/request_builder.py", line 53, in execute
+    raise APIError(dict(json_obj))
+postgrest.exceptions.APIError: {'message': 'new row violates row-level security policy for table "portfolio"', 'code': '42501', 'hint': None, 'details': None}
+INFO:     127.0.0.1:58701 - "POST /api/portfolio/ HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 410, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/applications.py", line 107, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 115, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 101, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 355, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 245, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2502, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 986, in run
+    result = context.run(func, *args)
+  File "/Users/valurothusharan/Desktop/finsights/backend/routes/portfolio.py", line 109, in add_to_portfolio
+    result = supabase.table("portfolio").insert(data).execute()
+  File "/opt/anaconda3/lib/python3.13/site-packages/postgrest/_sync/request_builder.py", line 53, in execute
+    raise APIError(dict(json_obj))
+postgrest.exceptions.APIError: {'message': 'new row violates row-level security policy for table "portfolio"', 'code': '42501', 'hint': None, 'details': None}
+INFO:     127.0.0.1:58712 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58712 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58710 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58710 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58710 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58710 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58714 - "GET /api/search?q=MS HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58717 - "GET /api/search?q=MSFT HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58717 - "GET /api/search/?q=MSFT HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58717 - "GET /api/search?q=MSFT.L HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58717 - "GET /api/search/?q=MSFT.L HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58717 - "GET /api/search?q=LS%201X%20MSFT HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58717 - "GET /api/search/?q=LS%201X%20MSFT HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58717 - "GET /api/search?q=LS%201X%20MSF HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58724 - "GET /api/search?q=A HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58724 - "GET /api/search/?q=A HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58724 - "GET /api/search?q=AGILENT%20TECHNOLOGIES%20INC HTTP/1.1" 307 Temporary Redirect
+Error searching Finnhub: 422 Client Error: Unprocessable Entity for url: https://finnhub.io/api/v1/search?q=AGILENT+TECHNOLOGIES+INC&token=d6h864pr01qnjncnn3pgd6h864pr01qnjncnn3q0
+INFO:     127.0.0.1:58724 - "GET /api/search/?q=AGILENT%20TECHNOLOGIES%20INC HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58730 - "POST /api/portfolio/ HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 410, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/applications.py", line 107, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 115, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 101, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 355, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 245, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2502, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 986, in run
+    result = context.run(func, *args)
+  File "/Users/valurothusharan/Desktop/finsights/backend/routes/portfolio.py", line 109, in add_to_portfolio
+    result = supabase.table("portfolio").insert(data).execute()
+  File "/opt/anaconda3/lib/python3.13/site-packages/postgrest/_sync/request_builder.py", line 53, in execute
+    raise APIError(dict(json_obj))
+postgrest.exceptions.APIError: {'message': 'new row violates row-level security policy for table "portfolio"', 'code': '42501', 'hint': None, 'details': None}
+INFO:     127.0.0.1:58995 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58995 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58993 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58993 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58999 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58999 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'services/auth.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [10213]
+INFO:     Started server process [11271]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [11271]
+INFO:     Started server process [11275]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:59342 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59342 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59344 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59344 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59344 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59344 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59342 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59342 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59398 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59398 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59396 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59396 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59408 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59408 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59406 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59406 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60160 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60160 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60478 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60478 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60563 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60563 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64257 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64257 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64357 - "OPTIONS /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64358 - "OPTIONS /api/portfolio/ HTTP/1.1" 200 OK
+WARNING: SUPABASE_JWT_SECRET not set. Falling back to demo mode.
+INFO:     127.0.0.1:64358 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+WARNING: SUPABASE_JWT_SECRET not set. Falling back to demo mode.
+INFO:     127.0.0.1:64358 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+WARNING: SUPABASE_JWT_SECRET not set. Falling back to demo mode.
+INFO:     127.0.0.1:64359 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+WARNING: SUPABASE_JWT_SECRET not set. Falling back to demo mode.
+INFO:     127.0.0.1:64359 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+WARNING: SUPABASE_JWT_SECRET not set. Falling back to demo mode.
+INFO:     127.0.0.1:64359 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+WARNING: SUPABASE_JWT_SECRET not set. Falling back to demo mode.
+INFO:     127.0.0.1:64359 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64433 - "GET /api/search?q=AAPl HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:64440 - "GET /api/search?q=AAP HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:64449 - "GET /api/search?q=AAPL HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:64449 - "GET /api/search/?q=AAPL HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64449 - "GET /api/search?q=APPLE%20INC HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:64449 - "GET /api/search/?q=APPLE%20INC HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64449 - "GET /api/search?q=Apple%20Inc HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:64449 - "GET /api/search/?q=Apple%20Inc HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64496 - "OPTIONS /api/portfolio/ HTTP/1.1" 200 OK
+WARNING: SUPABASE_JWT_SECRET not set. Falling back to demo mode.
+INFO:     127.0.0.1:64496 - "POST /api/portfolio/ HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 410, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/applications.py", line 107, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 115, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 101, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 355, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 245, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2502, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 986, in run
+    result = context.run(func, *args)
+  File "/Users/valurothusharan/Desktop/finsights/backend/routes/portfolio.py", line 109, in add_to_portfolio
+    result = supabase.table("portfolio").insert(data).execute()
+  File "/opt/anaconda3/lib/python3.13/site-packages/postgrest/_sync/request_builder.py", line 53, in execute
+    raise APIError(dict(json_obj))
+postgrest.exceptions.APIError: {'message': 'insert or update on table "portfolio" violates foreign key constraint "portfolio_user_id_fkey"', 'code': '23503', 'hint': None, 'details': 'Key (user_id)=(00000000-0000-0000-0000-000000000001) is not present in table "users".'}
+WARNING: SUPABASE_JWT_SECRET not set. Falling back to demo mode.
+INFO:     127.0.0.1:50333 - "POST /api/portfolio/ HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 410, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/applications.py", line 107, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 115, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 101, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 355, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 245, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2502, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 986, in run
+    result = context.run(func, *args)
+  File "/Users/valurothusharan/Desktop/finsights/backend/routes/portfolio.py", line 109, in add_to_portfolio
+    result = supabase.table("portfolio").insert(data).execute()
+  File "/opt/anaconda3/lib/python3.13/site-packages/postgrest/_sync/request_builder.py", line 53, in execute
+    raise APIError(dict(json_obj))
+postgrest.exceptions.APIError: {'message': 'new row violates row-level security policy for table "portfolio"', 'code': '42501', 'hint': None, 'details': None}
+INFO:     127.0.0.1:50360 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50360 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+WARNING: SUPABASE_JWT_SECRET not set. Falling back to demo mode.
+INFO:     127.0.0.1:50361 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+WARNING: SUPABASE_JWT_SECRET not set. Falling back to demo mode.
+INFO:     127.0.0.1:50361 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+WARNING: SUPABASE_JWT_SECRET not set. Falling back to demo mode.
+INFO:     127.0.0.1:50361 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+WARNING: SUPABASE_JWT_SECRET not set. Falling back to demo mode.
+INFO:     127.0.0.1:50361 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50393 - "GET /api/search?q=a HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:50393 - "GET /api/search/?q=a HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50393 - "GET /api/search?q=aa HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:50393 - "GET /api/search/?q=aa HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50393 - "GET /api/search?q=a HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:50420 - "GET /api/search?q=app HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:50420 - "GET /api/search/?q=app HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50420 - "GET /api/search?q=mi HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:50420 - "GET /api/search/?q=mi HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50420 - "GET /api/search?q=micro HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:50420 - "GET /api/search/?q=micro HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50420 - "GET /api/search?q=MSFT HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:50420 - "GET /api/search/?q=MSFT HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50420 - "GET /api/search?q=MSFT.AS HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:50420 - "GET /api/search/?q=MSFT.AS HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50420 - "GET /api/search?q=mic HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:50420 - "GET /api/search/?q=mic HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50420 - "GET /api/search?q=MSFT HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:50420 - "GET /api/search/?q=MSFT HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50420 - "GET /api/search?q=MSFT.L HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:50420 - "GET /api/search/?q=MSFT.L HTTP/1.1" 200 OK
+WARNING: SUPABASE_JWT_SECRET not set. Falling back to demo mode.
+INFO:     127.0.0.1:50527 - "POST /api/portfolio/ HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 410, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/applications.py", line 107, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 115, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 101, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 355, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 245, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2502, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 986, in run
+    result = context.run(func, *args)
+  File "/Users/valurothusharan/Desktop/finsights/backend/routes/portfolio.py", line 109, in add_to_portfolio
+    result = supabase.table("portfolio").insert(data).execute()
+  File "/opt/anaconda3/lib/python3.13/site-packages/postgrest/_sync/request_builder.py", line 53, in execute
+    raise APIError(dict(json_obj))
+postgrest.exceptions.APIError: {'message': 'new row violates row-level security policy for table "portfolio"', 'code': '42501', 'hint': None, 'details': None}
+INFO:     127.0.0.1:52003 - "GET /api/search?q=MSFT.L HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:52003 - "GET /api/search/?q=MSFT.L HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52027 - "OPTIONS /api/portfolio/ HTTP/1.1" 200 OK
+WARNING: SUPABASE_JWT_SECRET not set. Falling back to demo mode.
+INFO:     127.0.0.1:52027 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52058 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52058 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+WARNING: SUPABASE_JWT_SECRET not set. Falling back to demo mode.
+INFO:     127.0.0.1:52027 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+WARNING: SUPABASE_JWT_SECRET not set. Falling back to demo mode.
+INFO:     127.0.0.1:52027 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+WARNING: SUPABASE_JWT_SECRET not set. Falling back to demo mode.
+INFO:     127.0.0.1:52027 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+WARNING: SUPABASE_JWT_SECRET not set. Falling back to demo mode.
+INFO:     127.0.0.1:52027 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52096 - "GET /api/search?q=m HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:52096 - "GET /api/search/?q=m HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52096 - "GET /api/search?q=mic HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:52096 - "GET /api/search/?q=mic HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52096 - "GET /api/search?q=MSFT HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:52096 - "GET /api/search/?q=MSFT HTTP/1.1" 200 OK
+WARNING: SUPABASE_JWT_SECRET not set. Falling back to demo mode.
+INFO:     127.0.0.1:52028 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+WARNING: SUPABASE_JWT_SECRET not set. Falling back to demo mode.
+INFO:     127.0.0.1:52958 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+WARNING: SUPABASE_JWT_SECRET not set. Falling back to demo mode.
+INFO:     127.0.0.1:52958 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'routes/portfolio.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [11275]
+INFO:     Started server process [12757]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING: SUPABASE_JWT_SECRET not set. Falling back to demo mode.
+INFO:     127.0.0.1:53350 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+WARNING: SUPABASE_JWT_SECRET not set. Falling back to demo mode.
+INFO:     127.0.0.1:53350 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53373 - "GET /api/search?q=m HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:53373 - "GET /api/search/?q=m HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53373 - "GET /api/search?q=MSFT HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:53373 - "GET /api/search/?q=MSFT HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53373 - "GET /api/search?q=MSFT.L HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:53373 - "GET /api/search/?q=MSFT.L HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'routes/portfolio.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [12757]
+INFO:     Started server process [13082]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:53981 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53981 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+WARNING: SUPABASE_JWT_SECRET not set. Falling back to demo mode.
+INFO:     127.0.0.1:54002 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+WARNING: SUPABASE_JWT_SECRET not set. Falling back to demo mode.
+INFO:     127.0.0.1:54002 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+WARNING: SUPABASE_JWT_SECRET not set. Falling back to demo mode.
+INFO:     127.0.0.1:54002 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+WARNING: SUPABASE_JWT_SECRET not set. Falling back to demo mode.
+INFO:     127.0.0.1:54002 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54012 - "GET /api/search?q=in HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54012 - "GET /api/search/?q=in HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54012 - "GET /api/search?q=info HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54012 - "GET /api/search/?q=info HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54012 - "GET /api/search?q=INFY.NS HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54012 - "GET /api/search/?q=INFY.NS HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54012 - "GET /api/search?q=INFOSYS%20LTD HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54012 - "GET /api/search/?q=INFOSYS%20LTD HTTP/1.1" 200 OK
+WARNING: SUPABASE_JWT_SECRET not set. Falling back to demo mode.
+INFO:     127.0.0.1:54019 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54030 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54030 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54031 - "OPTIONS /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54032 - "OPTIONS /api/portfolio/ HTTP/1.1" 200 OK
+WARNING: SUPABASE_JWT_SECRET not set. Falling back to demo mode.
+INFO:     127.0.0.1:54031 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+WARNING: SUPABASE_JWT_SECRET not set. Falling back to demo mode.
+INFO:     127.0.0.1:54031 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+WARNING: SUPABASE_JWT_SECRET not set. Falling back to demo mode.
+INFO:     127.0.0.1:54031 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+WARNING: SUPABASE_JWT_SECRET not set. Falling back to demo mode.
+INFO:     127.0.0.1:54031 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54214 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54225 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54232 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54337 - "GET /api/search?q=m HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54340 - "GET /api/search?q=ms HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54340 - "GET /api/search/?q=ms HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54340 - "GET /api/search?q=msft HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54340 - "GET /api/search/?q=msft HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54340 - "GET /api/search?q=MSFT HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54340 - "GET /api/search/?q=MSFT HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54340 - "GET /api/search?q=MSFT.L HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54340 - "GET /api/search/?q=MSFT.L HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54348 - "GET /api/search?q=m HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54351 - "GET /api/search?q=mf HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54354 - "GET /api/search?q=mfst HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54354 - "GET /api/search/?q=mfst HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54354 - "GET /api/search?q=m HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54354 - "GET /api/search/?q=m HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54354 - "GET /api/search?q=mf HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54354 - "GET /api/search/?q=mf HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54354 - "GET /api/search?q=mfs HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54354 - "GET /api/search/?q=mfs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54369 - "GET /api/search?q=m HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54369 - "GET /api/search/?q=m HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54369 - "GET /api/search?q=mi HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54373 - "GET /api/search?q=mic HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54373 - "GET /api/search/?q=mic HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54373 - "GET /api/search?q=MSFT HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54373 - "GET /api/search/?q=MSFT HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54378 - "GET /api/search?q=MICROSOFT%20CORP HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54378 - "GET /api/search/?q=MICROSOFT%20CORP HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54383 - "OPTIONS /api/portfolio/ HTTP/1.1" 200 OK
+WARNING: SUPABASE_JWT_SECRET not set. Falling back to demo mode.
+INFO:     127.0.0.1:54383 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+WARNING: SUPABASE_JWT_SECRET not set. Falling back to demo mode.
+INFO:     127.0.0.1:54384 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+WARNING: SUPABASE_JWT_SECRET not set. Falling back to demo mode.
+INFO:     127.0.0.1:54384 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54397 - "OPTIONS /api/expenses/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54398 - "OPTIONS /api/expenses/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54397 - "GET /api/expenses/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54397 - "GET /api/expenses/1 HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'services/auth.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [13082]
+INFO:     Started server process [14025]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'routes/portfolio.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [14025]
+INFO:     Started server process [14030]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'routes/portfolio.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [14030]
+INFO:     Started server process [14037]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'services/auth.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [14037]
+INFO:     Started server process [14046]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'routes/portfolio.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [14046]
+INFO:     Started server process [14049]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:54472 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54472 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54477 - "GET /api/search?q=M HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54477 - "GET /api/search/?q=M HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54477 - "GET /api/search?q=Mf HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54482 - "GET /api/search?q=Mfst HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54482 - "GET /api/search/?q=Mfst HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54482 - "GET /api/search?q=M HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54486 - "GET /api/search?q=Mic HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54486 - "GET /api/search/?q=Mic HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54486 - "GET /api/search?q=MSFT HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54486 - "GET /api/search/?q=MSFT HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54486 - "GET /api/search?q=MSFT.L HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54486 - "GET /api/search/?q=MSFT.L HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54491 - "GET /api/search?q=MSFT HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54491 - "GET /api/search/?q=MSFT HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54491 - "GET /api/search?q=MICROSOFT%20CORP HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54491 - "GET /api/search/?q=MICROSOFT%20CORP HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54496 - "OPTIONS /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54496 - "POST /api/portfolio/ HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 410, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/applications.py", line 107, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 115, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 101, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 355, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 245, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2502, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 986, in run
+    result = context.run(func, *args)
+  File "/Users/valurothusharan/Desktop/finsights/backend/routes/portfolio.py", line 111, in add_to_portfolio
+    result = supabase.table("portfolio").insert(data).execute()
+  File "/opt/anaconda3/lib/python3.13/site-packages/postgrest/_sync/request_builder.py", line 53, in execute
+    raise APIError(dict(json_obj))
+postgrest.exceptions.APIError: {'message': 'new row violates row-level security policy for table "portfolio"', 'code': '42501', 'hint': None, 'details': None}
+INFO:     127.0.0.1:54497 - "POST /api/portfolio/ HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 410, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/applications.py", line 107, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 115, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 101, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 355, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/fastapi/routing.py", line 245, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/starlette/concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2502, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 986, in run
+    result = context.run(func, *args)
+  File "/Users/valurothusharan/Desktop/finsights/backend/routes/portfolio.py", line 111, in add_to_portfolio
+    result = supabase.table("portfolio").insert(data).execute()
+  File "/opt/anaconda3/lib/python3.13/site-packages/postgrest/_sync/request_builder.py", line 53, in execute
+    raise APIError(dict(json_obj))
+postgrest.exceptions.APIError: {'message': 'new row violates row-level security policy for table "portfolio"', 'code': '42501', 'hint': None, 'details': None}
+WARNING:  StatReload detected changes in 'routes/portfolio.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [14049]
+INFO:     Started server process [14678]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:54570 - "POST /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54570 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'db.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [14678]
+INFO:     Started server process [15024]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:54584 - "GET /api/search?q=I HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54584 - "GET /api/search/?q=I HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54584 - "GET /api/search?q=I.PM HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54584 - "GET /api/search/?q=I.PM HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [15024]
+INFO:     Started server process [15026]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:54592 - "POST /api/portfolio/ HTTP/1.1" 200 OK
+HTTP Error 404: {"quoteSummary":{"result":null,"error":{"code":"Not Found","description":"Quote not found for symbol: I.PM"}}}
+WARNING:  StatReload detected changes in 'routes/portfolio.py'. Reloading...
+$I.PM: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+
+1 Failed download:
+['I.PM']: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+INFO:     127.0.0.1:54592 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [15026]
+INFO:     Started server process [15027]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:54602 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54602 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54602 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54602 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54614 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54614 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54602 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54602 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54626 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54626 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54602 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54602 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54602 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54602 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54630 - "GET /api/search?q=M HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54633 - "GET /api/search?q=MFSt HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54633 - "GET /api/search/?q=MFSt HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54633 - "GET /api/search?q=Mic HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54633 - "GET /api/search/?q=Mic HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54633 - "GET /api/search?q=MIC.CS HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54633 - "GET /api/search/?q=MIC.CS HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54644 - "POST /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54644 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'routes/portfolio.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [15027]
+INFO:     Started server process [15162]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'routes/portfolio.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [15162]
+INFO:     Started server process [15166]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:54686 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54686 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+HTTP Error 404: {"quoteSummary":{"result":null,"error":{"code":"Not Found","description":"Quote not found for symbol: I.PM"}}}
+$I.PM: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+
+2 Failed downloads:
+['MIC.CS']: YFRateLimitError('Too Many Requests. Rate limited. Try after a while.')
+['I.PM']: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+INFO:     127.0.0.1:54687 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+HTTP Error 404: {"quoteSummary":{"result":null,"error":{"code":"Not Found","description":"Quote not found for symbol: I.PM"}}}
+$I.PM: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+
+2 Failed downloads:
+['MIC.CS']: YFRateLimitError('Too Many Requests. Rate limited. Try after a while.')
+['I.PM']: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+INFO:     127.0.0.1:54687 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+$I.PM: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+
+2 Failed downloads:
+['MIC.CS']: YFRateLimitError('Too Many Requests. Rate limited. Try after a while.')
+['I.PM']: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+INFO:     127.0.0.1:54687 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+$I.PM: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+
+2 Failed downloads:
+['MIC.CS']: YFRateLimitError('Too Many Requests. Rate limited. Try after a while.')
+['I.PM']: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+INFO:     127.0.0.1:54687 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54745 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54745 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+$I.PM: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+
+2 Failed downloads:
+['MIC.CS']: YFRateLimitError('Too Many Requests. Rate limited. Try after a while.')
+['I.PM']: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+INFO:     127.0.0.1:54746 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+$I.PM: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+
+2 Failed downloads:
+['MIC.CS']: YFRateLimitError('Too Many Requests. Rate limited. Try after a while.')
+['I.PM']: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+INFO:     127.0.0.1:54746 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54769 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54769 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+$I.PM: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+
+2 Failed downloads:
+['MIC.CS']: YFRateLimitError('Too Many Requests. Rate limited. Try after a while.')
+['I.PM']: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+INFO:     127.0.0.1:54770 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+$I.PM: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+
+2 Failed downloads:
+['MIC.CS']: YFRateLimitError('Too Many Requests. Rate limited. Try after a while.')
+['I.PM']: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+INFO:     127.0.0.1:54770 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+$I.PM: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+
+2 Failed downloads:
+['MIC.CS']: YFRateLimitError('Too Many Requests. Rate limited. Try after a while.')
+['I.PM']: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+INFO:     127.0.0.1:54787 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+$I.PM: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+
+2 Failed downloads:
+['MIC.CS']: YFRateLimitError('Too Many Requests. Rate limited. Try after a while.')
+['I.PM']: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+INFO:     127.0.0.1:54787 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54807 - "OPTIONS /api/expenses/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54808 - "OPTIONS /api/expenses/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54808 - "GET /api/expenses/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54808 - "GET /api/expenses/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54822 - "GET /api/expenses/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54822 - "GET /api/expenses/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54833 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54833 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54833 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54833 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54834 - "OPTIONS /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54835 - "OPTIONS /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54833 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54822 - "GET /api/expenses/1 HTTP/1.1" 200 OK
+$I.PM: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+
+2 Failed downloads:
+['MIC.CS']: YFRateLimitError('Too Many Requests. Rate limited. Try after a while.')
+['I.PM']: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+INFO:     127.0.0.1:54834 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+$I.PM: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+
+2 Failed downloads:
+['MIC.CS']: YFRateLimitError('Too Many Requests. Rate limited. Try after a while.')
+['I.PM']: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+INFO:     127.0.0.1:54834 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54974 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54974 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+$I.PM: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+
+2 Failed downloads:
+['MIC.CS']: YFRateLimitError('Too Many Requests. Rate limited. Try after a while.')
+['I.PM']: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+INFO:     127.0.0.1:54975 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+$I.PM: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+
+2 Failed downloads:
+['MIC.CS']: YFRateLimitError('Too Many Requests. Rate limited. Try after a while.')
+['I.PM']: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+INFO:     127.0.0.1:54975 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54975 - "GET /api/expenses/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54975 - "GET /api/expenses/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55005 - "GET /api/expenses/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55005 - "GET /api/expenses/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55007 - "GET /api/expenses/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55007 - "GET /api/expenses/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55017 - "OPTIONS /api/expenses/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55018 - "OPTIONS /api/expenses/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55017 - "GET /api/expenses/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55017 - "GET /api/expenses/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55093 - "GET /api/search?q=hi HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:55093 - "GET /api/search/?q=hi HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55108 - "OPTIONS /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55109 - "OPTIONS /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55108 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55108 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55108 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55108 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55117 - "GET /api/search?q=m HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:55120 - "GET /api/search?q=mi HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:55120 - "GET /api/search/?q=mi HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55120 - "GET /api/search?q=MSFT HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:55120 - "GET /api/search/?q=MSFT HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55120 - "GET /api/search?q=MSFT.AS HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:55120 - "GET /api/search/?q=MSFT.AS HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55110 - "OPTIONS /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55110 - "POST /api/portfolio/ HTTP/1.1" 200 OK
+Batch fetch error: If using all scalar values, you must pass an index
+INFO:     127.0.0.1:55110 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+Batch fetch error: If using all scalar values, you must pass an index
+INFO:     127.0.0.1:55110 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+Batch fetch error: If using all scalar values, you must pass an index
+INFO:     127.0.0.1:55110 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55124 - "GET /api/expenses/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55124 - "GET /api/expenses/1 HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'routes/expenses.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [15166]
+INFO:     Started server process [15352]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:55200 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55200 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55200 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55200 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55200 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55200 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+Batch fetch error: If using all scalar values, you must pass an index
+INFO:     127.0.0.1:55201 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+Batch fetch error: If using all scalar values, you must pass an index
+INFO:     127.0.0.1:55201 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+Batch fetch error: If using all scalar values, you must pass an index
+INFO:     127.0.0.1:55201 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+Batch fetch error: If using all scalar values, you must pass an index
+INFO:     127.0.0.1:55201 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+Batch fetch error: If using all scalar values, you must pass an index
+INFO:     127.0.0.1:55201 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+Batch fetch error: If using all scalar values, you must pass an index
+INFO:     127.0.0.1:55201 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+Batch fetch error: If using all scalar values, you must pass an index
+INFO:     127.0.0.1:55225 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+Batch fetch error: If using all scalar values, you must pass an index
+INFO:     127.0.0.1:55225 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+Batch fetch error: If using all scalar values, you must pass an index
+INFO:     127.0.0.1:55225 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+Batch fetch error: If using all scalar values, you must pass an index
+INFO:     127.0.0.1:55225 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55366 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55366 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+Batch fetch error: If using all scalar values, you must pass an index
+INFO:     127.0.0.1:55367 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+Batch fetch error: If using all scalar values, you must pass an index
+INFO:     127.0.0.1:55367 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55375 - "OPTIONS /api/expenses/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55376 - "OPTIONS /api/expenses/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55375 - "GET /api/expenses/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55375 - "GET /api/expenses/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55377 - "OPTIONS /api/expenses/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55377 - "POST /api/expenses/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55377 - "GET /api/expenses/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55424 - "GET /api/expenses/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55424 - "OPTIONS /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55429 - "OPTIONS /api/portfolio/ HTTP/1.1" 200 OK
+Batch fetch error: If using all scalar values, you must pass an index
+INFO:     127.0.0.1:55424 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+Batch fetch error: If using all scalar values, you must pass an index
+INFO:     127.0.0.1:55424 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+Batch fetch error: If using all scalar values, you must pass an index
+INFO:     127.0.0.1:55430 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+Batch fetch error: If using all scalar values, you must pass an index
+INFO:     127.0.0.1:55430 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55448 - "GET /api/expenses/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55448 - "GET /api/expenses/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55460 - "GET /api/expenses/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55460 - "GET /api/expenses/ HTTP/1.1" 200 OK
+Batch fetch error: If using all scalar values, you must pass an index
+INFO:     127.0.0.1:55460 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+Batch fetch error: If using all scalar values, you must pass an index
+INFO:     127.0.0.1:55460 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55472 - "GET /api/search?q=re HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:55475 - "GET /api/search?q=rel HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:55475 - "GET /api/search/?q=rel HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55475 - "GET /api/search?q=RS HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:55475 - "GET /api/search/?q=RS HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55475 - "GET /api/search?q=RELIANCE%20INC HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:55475 - "GET /api/search/?q=RELIANCE%20INC HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55504 - "OPTIONS /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55504 - "POST /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55504 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55505 - "OPTIONS /api/portfolio/29 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55505 - "DELETE /api/portfolio/29 HTTP/1.1" 200 OK
+Batch fetch error: If using all scalar values, you must pass an index
+INFO:     127.0.0.1:55505 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55519 - "GET /api/search?q=t HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:55522 - "GET /api/search?q=tata HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:55522 - "GET /api/search/?q=tata HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55522 - "GET /api/search?q=TCS.NS HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:55522 - "GET /api/search/?q=TCS.NS HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55511 - "POST /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55511 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55544 - "GET /api/expenses/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55544 - "GET /api/expenses/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55552 - "POST /api/expenses/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55552 - "GET /api/expenses/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55560 - "GET /api/expenses/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55563 - "GET /api/expenses/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55563 - "GET /api/expenses/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55576 - "OPTIONS /api/expenses/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55576 - "GET /api/expenses/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55577 - "GET /api/expenses/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55588 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55588 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55588 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55588 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55606 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55606 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55640 - "GET /api/expenses/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55640 - "GET /api/expenses/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55651 - "OPTIONS /api/expenses/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55651 - "POST /api/expenses/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55651 - "GET /api/expenses/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55652 - "GET /api/expenses/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55674 - "GET /api/expenses/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55674 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55674 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55712 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55712 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55713 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55713 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55740 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55740 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55741 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55741 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55826 - "OPTIONS /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55827 - "OPTIONS /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55826 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55826 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55828 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55828 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55886 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55886 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55897 - "GET /api/search?q=T HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:55900 - "GET /api/search?q=TCS HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:55900 - "GET /api/search/?q=TCS HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55904 - "GET /api/search?q=Tata HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:55904 - "GET /api/search/?q=Tata HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55906 - "OPTIONS /api/stocks/TCS.NS HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55906 - "GET /api/stocks/TCS.NS HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55904 - "GET /api/search?q=TCS.NS HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:55904 - "GET /api/search/?q=TCS.NS HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55907 - "OPTIONS /api/stocks/compare HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55907 - "POST /api/stocks/compare HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55910 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55910 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55922 - "GET /api/search?q=TCS HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:55922 - "GET /api/search/?q=TCS HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55922 - "GET /api/search?q=T HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:55922 - "GET /api/search/?q=T HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55922 - "GET /api/search?q=Tata HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:55922 - "GET /api/search/?q=Tata HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55922 - "GET /api/search?q=TCS.NS HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:55922 - "GET /api/search/?q=TCS.NS HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55938 - "OPTIONS /api/expenses/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55939 - "OPTIONS /api/expenses/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55938 - "GET /api/expenses/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55938 - "GET /api/expenses/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55940 - "OPTIONS /api/expenses/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55940 - "POST /api/expenses/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55940 - "GET /api/expenses/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56007 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56007 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56009 - "OPTIONS /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56010 - "OPTIONS /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56007 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56007 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56009 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56009 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56009 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56009 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56129 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56129 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56129 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56129 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56130 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56130 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56130 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56130 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56435 - "OPTIONS /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56436 - "OPTIONS /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56435 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56435 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+HTTP Error 404: {"quoteSummary":{"result":null,"error":{"code":"Not Found","description":"Quote not found for symbol: I.PM"}}}
+$I.PM: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+
+2 Failed downloads:
+['MIC.CS']: YFRateLimitError('Too Many Requests. Rate limited. Try after a while.')
+['I.PM']: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+INFO:     127.0.0.1:56437 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+HTTP Error 404: {"quoteSummary":{"result":null,"error":{"code":"Not Found","description":"Quote not found for symbol: I.PM"}}}
+$I.PM: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+
+2 Failed downloads:
+['MIC.CS']: YFRateLimitError('Too Many Requests. Rate limited. Try after a while.')
+['I.PM']: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+INFO:     127.0.0.1:56437 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58674 - "OPTIONS /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58675 - "OPTIONS /api/portfolio/ HTTP/1.1" 200 OK
+Auth Validation Error: [Errno 8] nodename nor servname provided, or not known
+Error fetching portfolio data: 401: Could not validate credentials
+Error fetching rate for EUR: 'NoneType' object is not subscriptable
+INFO:     127.0.0.1:58674 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+Error fetching rate for JPY: 'NoneType' object is not subscriptable
+Error fetching rate for GBP: 'NoneType' object is not subscriptable
+Error fetching rate for INR: 'NoneType' object is not subscriptable
+Error fetching rate for CNY: 'NoneType' object is not subscriptable
+Error fetching rate for AUD: 'NoneType' object is not subscriptable
+Error fetching rate for CAD: 'NoneType' object is not subscriptable
+Error fetching rate for CHF: 'NoneType' object is not subscriptable
+INFO:     127.0.0.1:58672 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58689 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+Auth Validation Error: [Errno 8] nodename nor servname provided, or not known
+Error fetching portfolio data: 401: Could not validate credentials
+INFO:     127.0.0.1:58690 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58689 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+Auth Validation Error: [Errno 8] nodename nor servname provided, or not known
+Error fetching portfolio data: 401: Could not validate credentials
+INFO:     127.0.0.1:58690 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58689 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+Auth Validation Error: [Errno 8] nodename nor servname provided, or not known
+Error fetching portfolio data: 401: Could not validate credentials
+INFO:     127.0.0.1:58690 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58805 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58805 - "GET /api/stocks/exchange-rates HTTP/1.1" 200 OK
+$I.PM: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+
+2 Failed downloads:
+['MIC.CS']: YFRateLimitError('Too Many Requests. Rate limited. Try after a while.')
+['I.PM']: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+INFO:     127.0.0.1:58806 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+$I.PM: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+
+2 Failed downloads:
+['MIC.CS']: YFRateLimitError('Too Many Requests. Rate limited. Try after a while.')
+['I.PM']: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+INFO:     127.0.0.1:58806 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+$I.PM: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+
+2 Failed downloads:
+['MIC.CS']: YFRateLimitError('Too Many Requests. Rate limited. Try after a while.')
+['I.PM']: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+INFO:     127.0.0.1:58828 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+$I.PM: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+
+2 Failed downloads:
+['MIC.CS']: YFRateLimitError('Too Many Requests. Rate limited. Try after a while.')
+['I.PM']: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+INFO:     127.0.0.1:58828 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+$I.PM: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+
+2 Failed downloads:
+['MIC.CS']: YFRateLimitError('Too Many Requests. Rate limited. Try after a while.')
+['I.PM']: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+INFO:     127.0.0.1:58853 - "GET /api/portfolio/ HTTP/1.1" 200 OK
+$I.PM: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+
+2 Failed downloads:
+['MIC.CS']: YFRateLimitError('Too Many Requests. Rate limited. Try after a while.')
+['I.PM']: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+INFO:     127.0.0.1:58853 - "GET /api/portfolio/ HTTP/1.1" 200 OK
