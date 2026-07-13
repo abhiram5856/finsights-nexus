@@ -22,6 +22,18 @@ def get_llm():
 
 # --- WORKER AGENTS ---
 
+def _extract_text_content(content) -> str:
+    if isinstance(content, list):
+        text_parts = []
+        for part in content:
+            if isinstance(part, dict):
+                if part.get("type") == "text":
+                    text_parts.append(part.get("text", ""))
+            elif isinstance(part, str):
+                text_parts.append(part)
+        return "".join(text_parts)
+    return str(content)
+
 def research_agent(state: AgentState):
     """Agent responsible for gathering news and macroeconomic knowledge."""
     llm = get_llm()
@@ -38,7 +50,8 @@ def research_agent(state: AgentState):
     response = agent.invoke({"messages": messages})
     # We append the final response from this agent to the state
     final_message = response["messages"][-1]
-    return {"messages": [{"role": "assistant", "content": f"Research Agent: {final_message.content}"}]}
+    text_content = _extract_text_content(final_message.content)
+    return {"messages": [{"role": "assistant", "content": f"Research Agent: {text_content}"}]}
 
 def quant_agent(state: AgentState):
     """Agent responsible for pulling stock data and running ML predictions."""
@@ -52,7 +65,8 @@ def quant_agent(state: AgentState):
     
     response = agent.invoke({"messages": messages})
     final_message = response["messages"][-1]
-    return {"messages": [{"role": "assistant", "content": f"Quant Agent: {final_message.content}"}]}
+    text_content = _extract_text_content(final_message.content)
+    return {"messages": [{"role": "assistant", "content": f"Quant Agent: {text_content}"}]}
 
 # --- SUPERVISOR ---
 
