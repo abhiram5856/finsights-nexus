@@ -7,13 +7,17 @@ from routes import portfolio, ai, stocks, search, expenses, user, market
 
 app = FastAPI()
 
-# ✅ CORS for local development and Vercel domains
+# ✅ CORS for local development and production Vercel domains
 origins = [
+    "http://localhost:5173",
     "http://localhost:5174",
     "http://localhost:3000",
+    "http://localhost:8000",
     "https://finsights-five.vercel.app",
-    "*"  # Temporary broad allow to troubleshoot
+    "https://finsights-nexus.vercel.app",
+    "*"  # Broad allow for initial deployment
 ]
+
 
 app.add_middleware(
     CORSMiddleware,
