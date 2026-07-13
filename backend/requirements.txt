@@ -21,4 +21,10 @@ feedparser
 langchain-community
 langchain-google-genai
 transformers
+optuna
+langgraph
+duckduckgo-search
+langchain-experimental
+cachetools
+
 
