@@ -141,11 +141,11 @@ def _get_cached_sentiment(symbol: str):
         bearish_count = 0
         
     if final_score > 60:
-        summary = f"Gemini AI Sentiment analysis detected Bullish sentiment across {bullish_count} recent headlines."
+        summary = f"Core sentiment analysis detected bullish trend indicators across {bullish_count} recent headlines."
     elif final_score < 40:
-        summary = f"Gemini AI Sentiment analysis detected Bearish sentiment across {bearish_count} recent headlines."
+        summary = f"Core sentiment analysis detected bearish trend indicators across {bearish_count} recent headlines."
     else:
-        summary = "Gemini AI Sentiment analysis detected Neutral/Mixed sentiment in recent news."
+        summary = "Core sentiment analysis detected neutral or mixed indicators in recent headlines."
         
     return {"score": final_score, "summary": summary}
 

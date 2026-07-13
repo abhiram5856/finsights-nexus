@@ -139,6 +139,14 @@ def get_stock_insights(ticker_symbol: str) -> dict:
         
         # 1. Fetch history (primary source)
         hist: pd.DataFrame = ticker.history(period="1y")
+        
+        # Fetch native currency details
+        try:
+            info = ticker.info
+        except:
+            info = {}
+        fast = ticker.fast_info
+        currency = info.get("currency") or getattr(fast, "currency", "USD")
     except Exception as exc:
         if "Too Many Requests" in str(exc) or "Rate limited" in str(exc):
             raise ValueError("Yahoo Finance rate limit hit. Please try again later.")
@@ -214,6 +222,7 @@ def get_stock_insights(ticker_symbol: str) -> dict:
         "volume_history": volume_history,
         "ml_prediction_30d": preds_list,
         "trend_signal": trend_signal,
+        "currency": currency,
     }
 
     _cache[ticker_symbol] = {"expiry": now + CACHE_TTL, "data": response}

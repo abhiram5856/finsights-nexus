@@ -34,6 +34,29 @@ export default function StockInsights({ theme, selectedTicker }) {
   const { data, loading, error, fetchStock } = useStockInsights();
   const autocompleteRef = useRef(null);
 
+  const formatStockPrice = (amount) => {
+    if (amount === null || amount === undefined) return 'N/A';
+    if (!data) return 'N/A';
+    const stockCurrency = data.currency || 'USD';
+    
+    // 1. Convert native amount to USD (divide by native rate to USD)
+    const nativeRateToUSD = getRate(stockCurrency);
+    const amountInUSD = amount / (nativeRateToUSD || 1);
+    
+    // 2. Convert from USD to selectedCurrency (multiply by selected rate)
+    const selectedRateToUSD = getRate(selectedCurrency);
+    const finalAmount = amountInUSD * (selectedRateToUSD || 1);
+    
+    // 3. Format as currency
+    const locale = selectedCurrency === 'INR' ? 'en-IN' : 'en-US';
+    return new Intl.NumberFormat(locale, {
+        style: 'currency',
+        currency: selectedCurrency,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    }).format(finalAmount);
+  };
+
   useEffect(() => {
     if (selectedTicker) {
       setTicker(selectedTicker);
@@ -76,7 +99,7 @@ export default function StockInsights({ theme, selectedTicker }) {
             <p className="text-[var(--text-muted)] text-sm font-medium">Latest Price</p>
             <Activity size={18} className="text-[var(--accent-primary)]/50" />
           </div>
-          <h2 className="text-3xl font-bold text-[var(--text-main)] mb-1">{formatCurrency(data.current_price, selectedCurrency, getRate(selectedCurrency))}</h2>
+          <h2 className="text-3xl font-bold text-[var(--text-main)] mb-1">{formatStockPrice(data.current_price)}</h2>
           <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold ${isPositive ? 'bg-[#10B981]/10 text-[#10B981]' : 'bg-[#EF4444]/10 text-[#EF4444]'}`}>
             {isPositive ? <TrendingUp size={14} /> : <TrendingDown size={14} />}
             {data.change_percent.toFixed(2)}%
@@ -85,7 +108,7 @@ export default function StockInsights({ theme, selectedTicker }) {
 
         <div className="glass-panel p-7 rounded-2xl shadow-sm hover:shadow-md transition-all">
           <p className="text-[var(--text-muted)] text-sm font-medium mb-4">52‑Week High</p>
-          <h2 className="text-2xl font-bold text-[var(--text-main)]">{formatCurrency(data['52_week_high'], selectedCurrency, getRate(selectedCurrency))}</h2>
+          <h2 className="text-2xl font-bold text-[var(--text-main)]">{formatStockPrice(data['52_week_high'])}</h2>
           <div className="mt-3 w-full bg-[var(--bg-primary)] h-1.5 rounded-full overflow-hidden">
             <div className="bg-[var(--accent-primary)] h-full rounded-full" style={{ width: '85%' }}></div>
           </div>
@@ -93,7 +116,7 @@ export default function StockInsights({ theme, selectedTicker }) {
 
         <div className="glass-panel p-7 rounded-2xl shadow-sm hover:shadow-md transition-all">
           <p className="text-[var(--text-muted)] text-sm font-medium mb-4">52‑Week Low</p>
-          <h2 className="text-2xl font-bold text-[var(--text-main)]">{formatCurrency(data['52_week_low'], selectedCurrency, getRate(selectedCurrency))}</h2>
+          <h2 className="text-2xl font-bold text-[var(--text-main)]">{formatStockPrice(data['52_week_low'])}</h2>
           <div className="mt-3 w-full bg-[var(--bg-primary)] h-1.5 rounded-full overflow-hidden">
             <div className="bg-[var(--text-muted)]/30 h-full rounded-full" style={{ width: '15%' }}></div>
           </div>
@@ -114,8 +137,8 @@ export default function StockInsights({ theme, selectedTicker }) {
         <div className="lg:col-span-2 glass-panel p-8 rounded-2xl shadow-sm">
           <div className="flex justify-between items-center mb-8">
             <h3 className="text-lg font-bold text-[var(--text-main)] flex items-center gap-2">
-              Market Performance & AI Forecast
-              <span className="text-[10px] bg-[var(--accent-primary)]/10 text-[var(--accent-primary)] px-2 py-0.5 rounded uppercase font-bold tracking-widest">ML Powered</span>
+              Market Performance & Trend Projection
+              <span className="text-[10px] bg-[var(--accent-primary)]/10 text-[var(--accent-primary)] px-2 py-0.5 rounded uppercase font-bold tracking-widest">Forecast</span>
             </h3>
           </div>
           <div className="w-full h-80">
@@ -210,7 +233,7 @@ export default function StockInsights({ theme, selectedTicker }) {
             : 'bg-[#EF4444]/10 text-[#EF4444] border-[#EF4444]/20 shadow-sm shadow-[#EF4444]/5'
             }`}
         >
-          <Bot className="mr-2" size={16} /> AI Sentiment: {data.trend_signal}
+          <Bot className="mr-2" size={16} /> Sentiment: {data.trend_signal}
         </div>
       </div>
     );
@@ -221,7 +244,7 @@ export default function StockInsights({ theme, selectedTicker }) {
     return (
       <div className="glass-panel p-6 md:p-8 rounded-2xl shadow-sm mt-6 mb-6">
          <h3 className="text-lg font-bold text-[var(--text-main)] mb-4 flex items-center gap-2">
-            <Bot size={20} className="text-[var(--accent-primary)]" /> <span className="gradient-text">Nexus Market Deep-Dive</span>
+            <Bot size={20} className="text-[var(--accent-primary)]" /> <span className="gradient-text">Market Deep-Dive</span>
          </h3>
          <p className="text-[var(--text-muted)] text-sm leading-relaxed font-medium">
             {data.sentiment_summary}
@@ -292,7 +315,7 @@ export default function StockInsights({ theme, selectedTicker }) {
             </div>
             <div>
               <p className="text-[10px] md:text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest">Global Insights</p>
-              <p className="text-[13px] md:text-sm font-semibold text-[var(--text-main)]">Real-time AI Sentiment Analysis</p>
+              <p className="text-[13px] md:text-sm font-semibold text-[var(--text-main)]">Real-time Market Analysis</p>
             </div>
           </div>
           <div className="w-full sm:w-auto flex justify-end">

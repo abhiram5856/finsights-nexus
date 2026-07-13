@@ -28,3 +28,4 @@ class StockInsights(BaseModel):
     volume_history: List[VolumePoint]
     ml_prediction_30d: List[PredictionPoint]
     trend_signal: str = "Neutral"
+    currency: Optional[str] = "USD"
